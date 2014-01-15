@@ -14,3 +14,7 @@ exports.db = {
   // For debugging, log SQL statements to the console
   debug: true
 };
+
+exports.uris = {
+  authorization_uri: "http://example.com/authorized"
+};
