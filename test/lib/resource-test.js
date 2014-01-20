@@ -52,12 +52,12 @@ describe("Accessing a protected resource", function() {
       sendRequest(this, { accessToken: null }, done);
     });
 
-    it("should return status 400", function() {
-      expect(this.res.statusCode).to.equal(400);
+    it("should return status 401", function() {
+      expect(this.res.statusCode).to.equal(401);
     });
 
-    it("should return an invalid_request error", function() {
-      verifyError(this.res, 'invalid_request');
+    it("should return an 'unauthorized' error", function() {
+      verifyError(this.res, 'unauthorized');
     });
   });
 
@@ -78,6 +78,18 @@ describe("Accessing a protected resource", function() {
 
     it("should return an unauthorized error", function() {
       verifyError(this.res, 'unauthorized');
+    });
+
+    describe("the response body", function() {
+      it("should include the authorization uri", function() {
+        expect(this.res.body).to.have.property('authorization_uri');
+        expect(this.res.body.authorization_uri).to.equal('http://example.com/authorized');
+      });
+
+      it("should include the service provider id", function() {
+        expect(this.res.body).to.have.property('service_provider_id');
+        expect(this.res.body.service_provider_id).to.equal('example_service_provider');
+      });
     });
   });
 

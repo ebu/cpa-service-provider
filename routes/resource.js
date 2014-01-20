@@ -21,12 +21,29 @@ var getAccessToken = function(req) {
 
 module.exports = function(app, authorizationProvider) {
   var logger = app.get('logger');
+  var config = app.get('config');
+
+  var sendUnauthorizedResponse = function(res) {
+    res.json(401, {
+      error: 'unauthorized',
+      authorization_uri: config.uris.authorization_uri,
+      service_provider_id: config.service_provider_id
+    });
+  };
 
   app.get('/resource', function(req, res) {
-    var accessToken = getAccessToken(req);
+    var accessToken = null;
 
-    if (!accessToken) {
-      res.json(400, { error: 'invalid_request' });
+    if (req.headers.authorization) {
+      accessToken = getAccessToken(req);
+
+      if (!accessToken) {
+        res.json(400, { error: 'invalid_request' });
+        return;
+      }
+    }
+    else {
+      sendUnauthorizedResponse(res);
       return;
     }
 
@@ -39,7 +56,7 @@ module.exports = function(app, authorizationProvider) {
         res.send('Hello world!');
       }
       else {
-        res.json(401, { error: 'unauthorized' });
+        sendUnauthorizedResponse(res);
       }
     });
   });
