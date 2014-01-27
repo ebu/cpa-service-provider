@@ -53,7 +53,7 @@ module.exports = function(app, authorizationProvider) {
         res.send(500);
       }
       else if (authorized) {
-        res.send('Hello world!');
+        res.json({ message: 'Hello world!'});
       }
       else {
         sendUnauthorizedResponse(res);

@@ -42,8 +42,14 @@ describe("Accessing a protected resource", function() {
       expect(this.res.statusCode).to.equal(200);
     });
 
+    // jshint expr:true
+    it("should return JSON", function() {
+      expect(this.res.headers['content-type']).to.equal('application/json; charset=utf-8');
+      expect(this.res.body).to.be.ok;
+    });
+
     it("should return the protected resource", function() {
-      expect(this.res.text).to.equal('Hello world!');
+      expect(this.res.body).to.deep.equal({ message: 'Hello world!' });
     });
   });
 
