@@ -19,4 +19,5 @@ exports.uris = {
   authorization_uri: "http://example.com/authorized"
 };
 
-exports.service_provider_id = "example_service_provider";
+exports.service_provider_id = process.env.SP_ID || '1';
+exports.service_provider_name = process.env.SP_NAME || 'STATION_NAME';
