@@ -43,7 +43,7 @@ describe("Accessing a protected resource", function() {
     });
 
     it("should return the protected resource", function() {
-      expect(this.res.text).to.equal('Hello world!');
+      expect(this.res.text).to.equal(app.get('config').service_provider_name + ' says : Hello world!');
     });
   });
 
@@ -88,7 +88,7 @@ describe("Accessing a protected resource", function() {
 
       it("should include the service provider id", function() {
         expect(this.res.body).to.have.property('service_provider_id');
-        expect(this.res.body.service_provider_id).to.equal('example_service_provider');
+        expect(this.res.body.service_provider_id).to.equal('1');
       });
     });
   });
