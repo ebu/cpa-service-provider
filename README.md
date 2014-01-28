@@ -46,4 +46,5 @@ example, database connection settings.
 ## Related Projects
 
 Authentication Provider: https://github.com/ebu/cpa-client
+
 Client: https://github.com/ebu/cpa-client
