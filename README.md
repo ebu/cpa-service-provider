@@ -3,6 +3,10 @@
 This project contains a reference implementation of the Cross-Platform
 Authentication Service Provider.
 
+## License
+
+The code is under BSD (3-Clause) License. (see LICENSE.txt)
+
 ## Prerequisites
 
 Ensure your system has [Node.js](http://nodejs.org/) and NPM installed. Also, install JSHint:

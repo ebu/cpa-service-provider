@@ -15,7 +15,8 @@
     "mysql": "~2.0.0-rc2",
     "lodash": "~2.4.1",
     "winston": "~0.7.2",
-    "request": "~2.31.0"
+    "request": "~2.31.0",
+    "optimist": "git+https://github.com/chrisn/node-optimist.git"
   },
   "devDependencies": {
     "supertest": "~0.8.2",
