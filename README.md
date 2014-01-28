@@ -16,9 +16,12 @@ Ensure your system has [Node.js](http://nodejs.org/) and NPM installed. Also, in
     $ git clone https://github.com/ebu/cpa-service-provider.git
     $ cd cpa-service-provider
     $ npm install
-
+    
 ## Run the Tests
 
+    $ mkdir data
+    $ NODE_ENV=test bin/init-db
+    
     $ npm test
 
 ## Configure
@@ -33,7 +36,7 @@ example, database connection settings.
 
 ## Initialise the Database
 
-    $ bin/init-db
+    $ NODE_ENV=development bin/init-db
 
 ## Start the server
 
