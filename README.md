@@ -3,11 +3,7 @@
 This project contains a reference implementation of the Cross-Platform
 Authentication Service Provider.
 
-More information on the EBU Cross-Platform Authentication project : http://tech.ebu.ch/cpa
-
-## License
-
-The code is under BSD (3-Clause) License. (see LICENSE.txt)
+More information on the [EBU Cross-Platform Authentication project](http://tech.ebu.ch/cpa)
 
 ## Prerequisites
 
@@ -43,8 +39,21 @@ example, database connection settings.
 
     $ bin/server
 
+
 ## Related Projects
 
-CPA Authentication Provider: https://github.com/ebu/cpa-auth-provider
+* [CPA Authentication Provider](https://github.com/ebu/cpa-auth-provider)
+* [CPA Client](https://github.com/ebu/cpa-client)
 
-CPA Client: https://github.com/ebu/cpa-client
+
+## Contributors
+
+* [Chris Needham](https://github.com/chrisn) (BBC)
+* [Michael Barroco](https://github.com/barroco) (EBU)
+
+
+## Copyright & License
+
+Copyright (c) 2014, EBU-UER Technology & Innovation
+
+The code is under BSD (3-Clause) License. (see LICENSE.txt)
