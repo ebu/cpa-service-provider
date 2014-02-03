@@ -22,6 +22,8 @@ module.exports = function(app) {
   };
 
   var tagToAtomEntry = function(tag) {
+
+    // TODO: replace dummy values
     var entry = {
       title:         "Tag: " + tag.station + " at " + formatAtomDate(tag.time),
       serviceId:     tag.station,
@@ -63,6 +65,8 @@ module.exports = function(app) {
   };
 
   var createAtomFeed = function(res, clientId, tags) {
+
+    // TODO: replace dummy values
     var data = {
       tagsUrl:     "http://example.com/clients/" + clientId + "/tags",
       authorName:  config.service_provider_name,
