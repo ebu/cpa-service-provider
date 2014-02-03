@@ -13,18 +13,18 @@ export NODE_ENV = test
 all: lint test
 
 test:
-	@$(MOCHA) --bail --reporter $(REPORTER) --require test/test-helper test/lib
+	@$(MOCHA) --bail --timeout 10000 --reporter $(REPORTER) --require test/test-helper test/lib
 
 lint: lint-src lint-test
 
 lint-src:
-	@$(JSHINT) bin/* lib/*.js test/*.js
+	@$(JSHINT) bin/* lib/*.js routes/*.js test/*.js
 
 lint-test:
 	@$(JSHINT) --config .jshintrc-test test/lib/*.js
 
 doc:
-	@$(JSDOC) --private --destination ./docs/ lib
+	@$(JSDOC) --private --destination ./docs/ lib models routes
 
 docs: doc
 
