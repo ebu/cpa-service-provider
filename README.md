@@ -7,7 +7,7 @@ More information on the [EBU Cross-Platform Authentication project](http://tech.
 
 ## Prerequisites
 
-Ensure your system has [Node.js](http://nodejs.org/) and NPM installed. Also, install JSHint:
+Ensure your system has [Node.js](http://nodejs.org/) (v0.10 or later) and NPM installed. Also, install JSHint:
 
     $ sudo npm install -g jshint
 
@@ -27,7 +27,7 @@ Ensure your system has [Node.js](http://nodejs.org/) and NPM installed. Also, in
 ## Configure
 
 The server reads configuration settings from the file `config.local.js`.
-An example config for refernce is in `config.dist.js`.
+An example config for reference is in `config.dist.js`.
 
     $ cp config.dist.js config.local.js
 
@@ -38,7 +38,7 @@ example, database connection settings.
 
     $ NODE_ENV=development bin/init-db
 
-## Start the server
+## Start the Server
 
     $ bin/server
 
