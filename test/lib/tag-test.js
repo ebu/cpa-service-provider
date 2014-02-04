@@ -496,12 +496,12 @@ describe("POST /tag", function() {
   });
 });
 
-describe("GET /usertags", function() {
+describe("GET /tags/all", function() {
   before(clearDatabase);
 
   context("with no tags in the database", function() {
     before(function(done) {
-      sendRequest(this, '/usertags', {}, done);
+      sendRequest(this, '/tags/all', {}, done);
     });
 
     it("should return status 200", function() {
@@ -518,7 +518,7 @@ describe("GET /usertags", function() {
     before(initDatabase);
 
     before(function(done) {
-      sendRequest(this, '/usertags', {}, done);
+      sendRequest(this, '/tags/all', {}, done);
     });
 
     it("should return status 200", function() {
