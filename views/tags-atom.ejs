@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:radiotag="http://radiodns.org/2011/radiotag">
+  <title>Tag List</title>
+  <link href="<%= tagsUrl %>">
+  <link href="<%= tagsUrl %>" rel="self"/>
+  <updated><%= dateUpdated %></updated>
+  <author>
+    <name><%= authorName %></name>
+  </author>
+  <id><%= uniqueId %></id>
+
+  <% entries.forEach(function(entry) { %>
+    <entry>
+      <title><%= entry.title %></title>
+      <radiotag:sid><%= entry.serviceId %></radiotag:sid>
+      <radiotag:service><%= entry.serviceName %></radiotag:service>
+      <link rel="image" href="<%= entry.imageUrl %>"/>
+      <link rel="canonical" href="<%= entry.canonicalUrl %>"/>
+      <id><%= entry.uniqueId %></id>
+      <updated><%= entry.dateUpdated %></updated>
+      <published><%= entry.datePublished %></published>
+      <summary><%= entry.summary %></summary>
+    </entry>
+  <% }); %>
+</feed>
