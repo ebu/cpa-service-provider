@@ -1,17 +1,13 @@
 "use strict";
 
 exports.db = {
-  host: '',
-  port: 3306,
-  user: '',
-  password: '',
   type: 'sqlite',
 
   // Database filename for SQLite
-  filename: 'data/test.sqlite',
+  // filename: 'data/test.sqlite',
 
   // For debugging, log SQL statements to the console
-  debug: true
+  debug: false
 };
 
 exports.uris = {
