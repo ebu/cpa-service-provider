@@ -1,25 +1,30 @@
-<?xml version="1.0"?>
-<feed xmlns="http://www.w3.org/2005/Atom" xmlns:radiotag="http://radiodns.org/2011/radiotag">
-  <title>Tag List</title>
-  <link href="<%= tagsUrl %>">
-  <link href="<%= tagsUrl %>" rel="self"/>
-  <updated><%= dateUpdated %></updated>
-  <author>
-    <name><%= authorName %></name>
-  </author>
-  <id><%= uniqueId %></id>
+<% include layout/head %>
 
-  <% entries.forEach(function(entry) { %>
-    <entry>
-      <title><%= entry.title %></title>
-      <radiotag:sid><%= entry.serviceId %></radiotag:sid>
-      <radiotag:service><%= entry.serviceName %></radiotag:service>
-      <link rel="image" href="<%= entry.imageUrl %>"/>
-      <link rel="canonical" href="<%= entry.canonicalUrl %>"/>
-      <id><%= entry.uniqueId %></id>
-      <updated><%= entry.dateUpdated %></updated>
-      <published><%= entry.datePublished %></published>
-      <summary><%= entry.summary %></summary>
-    </entry>
+<h1>Tags</h1>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <td>Client</td>
+      <td>User</td>
+      <td>Time</td>
+      <td>Station</td>
+      <td>Title</td>
+      <td>Description</td>
+    </tr>
+  </thead>
+  <tbody>
+  <% tags.forEach(function(tag) { %>
+    <tr>
+      <td><%= tag.client %></td>
+      <td><%= tag.user %></td>
+      <td><%= tag.time %></td>
+      <td><%= tag.station %></td>
+      <td><%= tag.title %></td>
+      <td><%= tag.description %></td>
+    </tr>
   <% }); %>
-</feed>
+  </tbody>
+</table>
+
+<% include layout/foot %>

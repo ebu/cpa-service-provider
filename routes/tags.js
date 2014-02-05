@@ -21,11 +21,19 @@ module.exports = function(app) {
     return Math.floor(date.getTime() / 1000);
   };
 
+  var getTagTitle = function(tag) {
+    return "Tag: " + tag.station + " at " + formatAtomDate(tag.time);
+  };
+
+  var getTagDescription = function(tag) {
+    return "Description of tag: " + tag.station + " at " + formatAtomDate(tag.time);
+  };
+
   var tagToAtomEntry = function(tag) {
 
     // TODO: replace dummy values
     var entry = {
-      title:         "Tag: " + tag.station + " at " + formatAtomDate(tag.time),
+      title:         getTagTitle(tag),
       serviceId:     tag.station,
       serviceName:   tag.station,
       imageUrl:      "http://example.com/image.png",
@@ -33,7 +41,7 @@ module.exports = function(app) {
       uniqueId:      "urn:uuid:" + tag.id,
       dateUpdated:   formatAtomDate(tag.time),
       datePublished: formatAtomDate(tag.time),
-      summary:       "Description of tag: " + tag.station + " at " + formatAtomDate(tag.time),
+      summary:       getTagDescription(tag)
     };
 
     return entry;
@@ -96,7 +104,7 @@ module.exports = function(app) {
     data.dateUpdated = formatAtomDate(date);
 
     res.set('Content-Type', 'application/atom+xml; charset=utf-8');
-    res.render('tags.ejs', data);
+    res.render('tags-atom.ejs', data);
   };
 
   var protectedResourceHandler =
@@ -179,6 +187,28 @@ module.exports = function(app) {
           res.statusCode = 201;
           createAtomFeed(res, req.device.id, tag);
         }
+      });
+  });
+
+  app.get('/tags/all', function(req, res) {
+    db.Tag.findAll({ include: [db.Client], order: 'time DESC' })
+      .then(function(tags) {
+        var tagInfo = tags.map(function(tag) {
+          return {
+            client:      tag.client_id,
+            user:        tag.client.user_id,
+            time:        formatAtomDate(tag.time),
+            station:     tag.station,
+            title:       getTagTitle(tag),
+            description: getTagDescription(tag)
+          };
+        });
+
+        res.render('tags.ejs', { tags: tagInfo });
+      },
+      function(error) {
+        logger.error(error);
+        res.send(500);
       });
   });
 };
