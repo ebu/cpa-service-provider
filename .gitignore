@@ -6,3 +6,6 @@ config.local.js
 data/test.sqlite
 
 npm-debug.log
+
+coverage
+docs
