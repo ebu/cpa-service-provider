@@ -80,7 +80,7 @@ describe("Accessing a protected resource", function() {
 
       it("should return the protected resource", function() {
         expect(this.res.body).to.deep.equal({
-          message: app.get('config').service_provider_name + ' says : Hello world!'
+          message: 'BBC1 says : Hello world!'
         });
       });
 
@@ -151,7 +151,7 @@ describe("Accessing a protected resource", function() {
 
       it("should return the protected resource", function() {
         expect(this.res.body).to.deep.equal({
-          message: app.get('config').service_provider_name + ' says : Hello world!'
+          message: 'BBC1 says : Hello world!'
         });
       });
 
@@ -221,7 +221,7 @@ describe("Accessing a protected resource", function() {
 
       it("should return the protected resource", function() {
         expect(this.res.body).to.deep.equal({
-          message: app.get('config').service_provider_name + ' says : Hello world!'
+          message: 'BBC1 says : Hello world!'
         });
       });
 
@@ -292,7 +292,7 @@ describe("Accessing a protected resource", function() {
 
       it("should return the protected resource", function() {
         expect(this.res.body).to.deep.equal({
-          message: app.get('config').service_provider_name + ' says : Hello world!'
+          message: 'BBC1 says : Hello world!'
         });
       });
 
