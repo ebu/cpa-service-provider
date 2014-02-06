@@ -374,7 +374,7 @@ describe("Accessing a protected resource", function() {
     describe("the response body", function() {
       it("should include the authorization uri", function() {
         expect(this.res.body).to.have.property('authorization_uri');
-        expect(this.res.body.authorization_uri).to.equal('http://example.com/authorized');
+        expect(this.res.body.authorization_uri).to.equal('http://ap.example.com');
       });
 
       it("should include the service provider id", function() {

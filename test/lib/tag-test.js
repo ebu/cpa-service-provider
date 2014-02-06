@@ -6,6 +6,7 @@ var db  = require('../../models');
 var nock = require('nock');
 var xpath = require('xpath');
 var DOMParser = require('xmldom').DOMParser;
+var cheerio = require('cheerio');
 
 var verifyError = function(res, error) {
   expect(res.headers['content-type']).to.equal('application/json; charset=utf-8');
@@ -491,6 +492,53 @@ describe("POST /tag", function() {
 
     it("should return status 400", function() {
       expect(this.res.statusCode).to.equal(400);
+    });
+  });
+});
+
+describe("GET /tags/all", function() {
+  before(clearDatabase);
+
+  context("with no tags in the database", function() {
+    before(function(done) {
+      sendRequest(this, '/tags/all', {}, done);
+    });
+
+    it("should return status 200", function() {
+      expect(this.res.statusCode).to.equal(200);
+    });
+
+    it("should return an HTML document", function() {
+      expect(this.res.headers['content-type']).to.equal('text/html; charset=utf-8');
+      expect(this.res.text).to.match(/^<!DOCTYPE html>/);
+    });
+  });
+
+  context("with some tags in the database", function() {
+    before(initDatabase);
+
+    before(function(done) {
+      sendRequest(this, '/tags/all', {}, done);
+    });
+
+    it("should return status 200", function() {
+      expect(this.res.statusCode).to.equal(200);
+    });
+
+    it("should return an |HTML document", function() {
+      expect(this.res.headers['content-type']).to.equal('text/html; charset=utf-8');
+      expect(this.res.text).to.match(/^<!DOCTYPE html>/);
+    });
+
+    describe("the HTML document", function() {
+      before(function() {
+        this.$ = cheerio.load(this.res.text);
+      });
+
+      it("should have a list of tags", function() {
+        var elements = this.$('table tbody tr');
+        expect(elements.length).to.equal(3);
+      });
     });
   });
 });

@@ -16,7 +16,8 @@ exports.db = {
 };
 
 exports.uris = {
-  authorization_uri: "http://example.com/authorized"
+  authorization_uri: "http://ap.example.com/authorized",
+  authorization_provider_base_uri: "http://ap.example.com"
 };
 
 exports.service_provider_id = process.env.SERVICE_PROVIDER_ID || 'STATION_NAME';
