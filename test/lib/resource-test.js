@@ -379,7 +379,7 @@ describe("Accessing a protected resource", function() {
 
       it("should include the service provider id", function() {
         expect(this.res.body).to.have.property('service_provider_id');
-        expect(this.res.body.service_provider_id).to.equal('1');
+        expect(this.res.body.service_provider_id).to.equal('BBC1');
       });
     });
   });

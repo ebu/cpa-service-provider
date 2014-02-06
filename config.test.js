@@ -15,5 +15,4 @@ exports.uris = {
   authorization_provider_base_uri: "http://ap.example.com"
 };
 
-exports.service_provider_id = '1';
-exports.service_provider_name = 'BBC1';
+exports.service_provider_id = 'BBC1';
