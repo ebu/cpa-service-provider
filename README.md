@@ -7,21 +7,19 @@ More information on the [EBU Cross-Platform Authentication project](http://tech.
 
 ## Prerequisites
 
-Ensure your system has [Node.js](http://nodejs.org/) (v0.10 or later) and NPM installed. Also, install JSHint:
-
-    $ sudo npm install -g jshint
+Ensure your system has [Node.js](http://nodejs.org/) (v0.10 or later) and NPM installed.
 
 ## Getting Started
 
     $ git clone https://github.com/ebu/cpa-service-provider.git
     $ cd cpa-service-provider
     $ npm install
-    
+
 ## Run the Tests
 
     $ mkdir data
     $ NODE_ENV=test bin/init-db
-    
+
     $ npm test
 
 ## Configure
@@ -42,6 +40,15 @@ example, database connection settings.
 
     $ bin/server
 
+## Development
+
+This project includes a `Makefile` that is used to run various tasks during
+development. This includes JSHint, for code verification, Istanbul for test
+coverage, and JSDoc for documentation.
+
+As general-purpose tools, these should be installed globally:
+
+    $ sudo npm install -g jshint istanbul jsdoc
 
 ## Related Projects
 
