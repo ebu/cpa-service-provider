@@ -10,6 +10,19 @@ module.exports = function(app) {
     require('../lib/protected-resource-handler')(config, db, logger);
 
   app.get('/resource', protectedResourceHandler, function(req, res) {
-    res.json({ message: config.service_provider_id + ' says : Hello world!'});
+    var message = config.service_provider_id + " says: Hello ";
+
+    if (req.user) {
+      message += "user " + req.user.id + "!";
+    }
+    else if (req.device) {
+      message += "client " + req.device.id + "!";
+    }
+    else {
+      // Shouldn't get here.
+      message += "unknown client!";
+    }
+
+    res.json({ message: message });
   });
 };
