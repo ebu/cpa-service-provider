@@ -2,16 +2,11 @@
 
 var app = require('../../lib/app');
 
+var requestHelper = require('../request-helper');
+
 describe('GET /status', function() {
   before(function(done) {
-    var self = this;
-
-    request(app)
-      .get('/status')
-      .end(function(err, res) {
-        self.res = res;
-        done(err);
-      });
+    requestHelper.sendRequest(this, '/status', null, done);
   });
 
   it('should return status 200', function() {

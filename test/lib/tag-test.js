@@ -3,17 +3,13 @@
 var app = require('../../lib/app');
 var db  = require('../../models');
 
-var nock = require('nock');
-var xpath = require('xpath');
-var DOMParser = require('xmldom').DOMParser;
-var cheerio = require('cheerio');
+var assertions    = require('../assertions');
+var requestHelper = require('../request-helper');
 
-var verifyError = function(res, error) {
-  expect(res.headers['content-type']).to.equal('application/json; charset=utf-8');
-  expect(res.body).to.be.an('object');
-  expect(res.body).to.have.property('error');
-  expect(res.body.error).to.equal(error);
-};
+var nock      = require('nock');
+var xpath     = require('xpath');
+var DOMParser = require('xmldom').DOMParser;
+var cheerio   = require('cheerio');
 
 var clearDatabase = function(done) {
   db.sequelize.query('DELETE FROM Users').then(function() {
@@ -68,27 +64,6 @@ var initDatabase = function(done) {
     });
 };
 
-var sendRequest = function(context, path, opts, done) {
-  var method = opts.method || 'get';
-
-  var req = request(app)[method](path);
-
-  if (opts.accessToken) {
-    var tokenType = opts.tokenType || 'Bearer';
-
-    req.set('Authorization', tokenType + ' ' + opts.accessToken);
-  }
-
-  if (opts.data) {
-    req.send(opts.data);
-  }
-
-  req.end(function(err, res) {
-    context.res = res;
-    done(err);
-  });
-};
-
 var verifyXPathNodeValue = function(doc, path, value) {
   var nodes = xpath.select(path, doc);
   expect(nodes.length).to.equal(1, "xpath " + path + " returned no elements");
@@ -114,7 +89,7 @@ describe("GET /tags", function() {
         .post('/authorized')
         .reply(200, { client_id: 11, user_id: 12 });
 
-      sendRequest(this, '/tags', { accessToken: '123abc' }, done);
+      requestHelper.sendRequest(this, '/tags', { accessToken: '123abc' }, done);
     });
 
     it("should return status 200", function() {
@@ -249,15 +224,11 @@ describe("GET /tags", function() {
         .post('/authorized')
         .reply(401);
 
-      sendRequest(this, '/tags', { accessToken: '456def' }, done);
-    });
-
-    it("should return status 401", function() {
-      expect(this.res.statusCode).to.equal(401);
+      requestHelper.sendRequest(this, '/tags', { accessToken: '456def' }, done);
     });
 
     it("should return an 'unauthorized' error", function() {
-      verifyError(this.res, 'unauthorized');
+      assertions.verifyError(this.res, 401, 'unauthorized');
     });
   });
 });
@@ -278,7 +249,11 @@ describe("POST /tag", function() {
         time: 1390981693
       };
 
-      sendRequest(this, '/tag', { method: 'post', data: data, accessToken: '123abc' }, done);
+      requestHelper.sendRequest(this, '/tag', {
+        method:      'post',
+        data:        data,
+        accessToken: '123abc'
+      }, done);
     });
 
     it("should return status 201", function() {
@@ -441,7 +416,11 @@ describe("POST /tag", function() {
         // time: 1390981693
       };
 
-      sendRequest(this, '/tag', { method: 'post', data: data, accessToken: '123abc' }, done);
+      requestHelper.sendRequest(this, '/tag', {
+        method:      'post',
+        data:        data,
+        accessToken: '123abc'
+      }, done);
     });
 
     it("should return status 400", function() {
@@ -464,7 +443,11 @@ describe("POST /tag", function() {
         time: 'invalid'
       };
 
-      sendRequest(this, '/tag', { method: 'post', data: data, accessToken: '123abc' }, done);
+      requestHelper.sendRequest(this, '/tag', {
+        method:      'post',
+        data:        data,
+        accessToken: '123abc'
+      }, done);
     });
 
     it("should return status 400", function() {
@@ -487,7 +470,11 @@ describe("POST /tag", function() {
         time: 1390981693
       };
 
-      sendRequest(this, '/tag', { method: 'post', data: data, accessToken: '123abc' }, done);
+      requestHelper.sendRequest(this, '/tag', {
+        method:      'post',
+        data:        data,
+        accessToken: '123abc'
+      }, done);
     });
 
     it("should return status 400", function() {
@@ -501,7 +488,7 @@ describe("GET /tags/all", function() {
 
   context("with no tags in the database", function() {
     before(function(done) {
-      sendRequest(this, '/tags/all', {}, done);
+      requestHelper.sendRequest(this, '/tags/all', null, done);
     });
 
     it("should return status 200", function() {
@@ -518,14 +505,14 @@ describe("GET /tags/all", function() {
     before(initDatabase);
 
     before(function(done) {
-      sendRequest(this, '/tags/all', {}, done);
+      requestHelper.sendRequest(this, '/tags/all', null, done);
     });
 
     it("should return status 200", function() {
       expect(this.res.statusCode).to.equal(200);
     });
 
-    it("should return an |HTML document", function() {
+    it("should return an HTML document", function() {
       expect(this.res.headers['content-type']).to.equal('text/html; charset=utf-8');
       expect(this.res.text).to.match(/^<!DOCTYPE html>/);
     });
