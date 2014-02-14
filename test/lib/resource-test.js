@@ -3,6 +3,9 @@
 var app = require('../../lib/app');
 var db  = require('../../models');
 
+var assertions    = require('../assertions');
+var requestHelper = require('../request-helper');
+
 var nock = require('nock');
 
 var clearDatabase = function(done) {
@@ -31,28 +34,6 @@ var createUser = function(id, done) {
     });
 };
 
-var sendRequest = function(context, opts, done) {
-  var req = request(app).get('/resource');
-
-  if (opts.accessToken) {
-    var tokenType = opts.tokenType || 'Bearer';
-
-    req.set('Authorization', tokenType + ' ' + opts.accessToken);
-  }
-
-  req.end(function(err, res) {
-    context.res = res;
-    done(err);
-  });
-};
-
-var verifyError = function(res, error) {
-  expect(res.headers['content-type']).to.equal('application/json; charset=utf-8');
-  expect(res.body).to.be.an('object');
-  expect(res.body).to.have.property('error');
-  expect(res.body.error).to.equal(error);
-};
-
 describe("Accessing a protected resource", function() {
   context("with a valid access token", function() {
     context("with no existing client or user in the database", function() {
@@ -65,7 +46,7 @@ describe("Accessing a protected resource", function() {
           .post('/authorized')
           .reply(200, { client_id: 11, user_id: 12 });
 
-        sendRequest(this, { accessToken: '123abc' }, done);
+        requestHelper.sendRequest(this, '/resource', { accessToken: '123abc' }, done);
       });
 
       it("should return status 200", function() {
@@ -136,7 +117,7 @@ describe("Accessing a protected resource", function() {
           .post('/authorized')
           .reply(200, { client_id: 11, user_id: 12 });
 
-        sendRequest(this, { accessToken: '123abc' }, done);
+        requestHelper.sendRequest(this, '/resource', { accessToken: '123abc' }, done);
       });
 
       it("should return status 200", function() {
@@ -206,7 +187,7 @@ describe("Accessing a protected resource", function() {
           .post('/authorized')
           .reply(200, { client_id: 11, user_id: 13 });
 
-        sendRequest(this, { accessToken: '123abc' }, done);
+        requestHelper.sendRequest(this, '/resource', { accessToken: '123abc' }, done);
       });
 
       it("should return status 200", function() {
@@ -277,7 +258,7 @@ describe("Accessing a protected resource", function() {
           .post('/authorized')
           .reply(200, { client_id: 11, user_id: 13 });
 
-        sendRequest(this, { accessToken: '123abc' }, done);
+        requestHelper.sendRequest(this, '/resource', { accessToken: '123abc' }, done);
       });
 
       it("should return status 200", function() {
@@ -340,15 +321,11 @@ describe("Accessing a protected resource", function() {
 
   context("with no authorization header", function() {
     before(function(done) {
-      sendRequest(this, { accessToken: null }, done);
-    });
-
-    it("should return status 401", function() {
-      expect(this.res.statusCode).to.equal(401);
+      requestHelper.sendRequest(this, '/resource', { accessToken: null }, done);
     });
 
     it("should return an 'unauthorized' error", function() {
-      verifyError(this.res, 'unauthorized');
+      assertions.verifyError(this.res, 401, 'unauthorized');
     });
   });
 
@@ -360,15 +337,11 @@ describe("Accessing a protected resource", function() {
         .post('/authorized')
         .reply(401);
 
-      sendRequest(this, { accessToken: 'abc123' }, done);
-    });
-
-    it("should return status 401", function() {
-      expect(this.res.statusCode).to.equal(401);
+      requestHelper.sendRequest(this, '/resource', { accessToken: 'abc123' }, done);
     });
 
     it("should return an unauthorized error", function() {
-      verifyError(this.res, 'unauthorized');
+      assertions.verifyError(this.res, 401, 'unauthorized');
     });
 
     describe("the response body", function() {
@@ -386,15 +359,14 @@ describe("Accessing a protected resource", function() {
 
   context("with an incorrect token type", function() {
     before(function(done) {
-      sendRequest(this, { accessToken: 'abc123', tokenType: 'Basic' }, done);
-    });
-
-    it("should return status 400", function() {
-      expect(this.res.statusCode).to.equal(400);
+      requestHelper.sendRequest(this, '/resource', {
+        accessToken: 'abc123',
+        tokenType:   'Basic'
+      }, done);
     });
 
     it("should return an invalid_request error", function() {
-      verifyError(this.res, 'invalid_request');
+      assertions.verifyError(this.res, 400, 'invalid_request');
     });
   });
 
@@ -406,7 +378,7 @@ describe("Accessing a protected resource", function() {
         .post('/authorized')
         .reply(500);
 
-      sendRequest(this, { accessToken: 'abc123' }, done);
+      requestHelper.sendRequest(this, '/resource', { accessToken: 'abc123' }, done);
     });
 
     it("should return status 500", function() {

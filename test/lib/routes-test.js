@@ -2,14 +2,11 @@
 
 var app = require('../../lib/app');
 
+var requestHelper = require('../request-helper');
+
 describe('GET /', function() {
   beforeEach(function(done) {
-    var self = this;
-
-    request(app).get('/').end(function(err, res) {
-      self.res = res;
-      done(err);
-    });
+    requestHelper.sendRequest(this, '/', null, done);
   });
 
   it('respond with something', function() {

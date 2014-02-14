@@ -19,10 +19,10 @@ test:
 lint: lint-src lint-test
 
 lint-src:
-	@$(JSHINT) bin/* lib/*.js routes/*.js test/*.js
+	@$(JSHINT) bin/* lib/*.js routes/*.js
 
 lint-test:
-	@$(JSHINT) --config .jshintrc-test test/lib/*.js
+	@$(JSHINT) --config .jshintrc-test test/*.js test/lib/*.js
 
 coverage:
 	@$(COVERAGE) cover $(MOCHA) -- --reporter $(REPORTER) --require test/test-helper test/lib
