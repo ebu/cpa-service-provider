@@ -505,7 +505,7 @@ describe("GET /tags/all", function() {
     before(initDatabase);
 
     before(function(done) {
-      requestHelper.sendRequest(this, '/tags/all', null, done);
+      requestHelper.sendRequest(this, '/tags/all', { parseDOM: true }, done);
     });
 
     it("should return status 200", function() {
@@ -518,10 +518,6 @@ describe("GET /tags/all", function() {
     });
 
     describe("the HTML document", function() {
-      before(function() {
-        this.$ = cheerio.load(this.res.text);
-      });
-
       it("should have a list of tags", function() {
         var elements = this.$('table tbody tr');
         expect(elements.length).to.equal(3);
