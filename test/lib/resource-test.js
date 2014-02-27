@@ -61,7 +61,7 @@ describe("Accessing a protected resource", function() {
 
       it("should return the protected resource", function() {
         expect(this.res.body).to.deep.equal({
-          message: 'BBC1 says : Hello world!'
+          message: 'BBC1 says: Hello user 12!'
         });
       });
 
@@ -132,7 +132,7 @@ describe("Accessing a protected resource", function() {
 
       it("should return the protected resource", function() {
         expect(this.res.body).to.deep.equal({
-          message: 'BBC1 says : Hello world!'
+          message: 'BBC1 says: Hello user 12!'
         });
       });
 
@@ -185,7 +185,7 @@ describe("Accessing a protected resource", function() {
 
         nock(config.uris.authorization_uri)
           .post('/authorized')
-          .reply(200, { client_id: 11, user_id: 13 });
+          .reply(200, { client_id: 11, user_id: null });
 
         requestHelper.sendRequest(this, '/resource', { accessToken: '123abc' }, done);
       });
@@ -202,7 +202,7 @@ describe("Accessing a protected resource", function() {
 
       it("should return the protected resource", function() {
         expect(this.res.body).to.deep.equal({
-          message: 'BBC1 says : Hello world!'
+          message: 'BBC1 says: Hello client 11!'
         });
       });
 
@@ -231,16 +231,9 @@ describe("Accessing a protected resource", function() {
           expect(this.clients[0].id).to.equal(11);
         });
 
-        // jshint expr:true
-        it("should contain a new user record", function() {
-          expect(this.users).to.be.ok;
-          expect(this.users.length).to.equal(1);
-          expect(this.users[0].id).to.equal(13);
-        });
-
         describe("the client", function() {
-          it("should be associated with the user", function() {
-            expect(this.clients[0].user_id).to.equal(13);
+          it("should not be associated with a user", function() {
+            expect(this.clients[0].user_id).to.equal(null);
           });
         });
       });
@@ -273,7 +266,7 @@ describe("Accessing a protected resource", function() {
 
       it("should return the protected resource", function() {
         expect(this.res.body).to.deep.equal({
-          message: 'BBC1 says : Hello world!'
+          message: 'BBC1 says: Hello user 13!'
         });
       });
 
