@@ -378,4 +378,76 @@ describe("Accessing a protected resource", function() {
       expect(this.res.statusCode).to.equal(500);
     });
   });
+
+  context("when the authorization server returns a null client_id", function() {
+    before(clearDatabase);
+
+    before(function(done) {
+      var config = app.get('config');
+
+      nock(config.uris.authorization_uri)
+        .post('/authorized')
+        .reply(200, { client_id: null, user_id: null });
+
+      requestHelper.sendRequest(this, '/resource', { accessToken: '123abc' }, done);
+    });
+
+    it("should return status 500", function() {
+      expect(this.res.statusCode).to.equal(500);
+    });
+  });
+
+  context("when the authorization server returns an invalid client_id", function() {
+    before(clearDatabase);
+
+    before(function(done) {
+      var config = app.get('config');
+
+      nock(config.uris.authorization_uri)
+        .post('/authorized')
+        .reply(200, { client_id: 'invalid', user_id: null });
+
+      requestHelper.sendRequest(this, '/resource', { accessToken: '123abc' }, done);
+    });
+
+    it("should return status 500", function() {
+      expect(this.res.statusCode).to.equal(500);
+    });
+  });
+
+  context("when the authorization server returns an invalid user_id", function() {
+    before(clearDatabase);
+
+    before(function(done) {
+      var config = app.get('config');
+
+      nock(config.uris.authorization_uri)
+        .post('/authorized')
+        .reply(200, { client_id: 11, user_id: 'invalid' });
+
+      requestHelper.sendRequest(this, '/resource', { accessToken: '123abc' }, done);
+    });
+
+    it("should return status 500", function() {
+      expect(this.res.statusCode).to.equal(500);
+    });
+  });
+
+  context("when the authorization server returns invalid JSON", function() {
+    before(clearDatabase);
+
+    before(function(done) {
+      var config = app.get('config');
+
+      nock(config.uris.authorization_uri)
+        .post('/authorized')
+        .reply(200, "invalid");
+
+      requestHelper.sendRequest(this, '/resource', { accessToken: '123abc' }, done);
+    });
+
+    it("should return status 500", function() {
+      expect(this.res.statusCode).to.equal(500);
+    });
+  });
 });

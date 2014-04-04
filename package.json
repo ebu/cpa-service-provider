@@ -19,7 +19,8 @@
     "optimist": "git+https://github.com/chrisn/node-optimist.git",
     "xpath": "0.0.5",
     "xmldom": "~0.1.18",
-    "node-uuid": "~1.4.1"
+    "node-uuid": "~1.4.1",
+    "async": "~0.2.10"
   },
   "devDependencies": {
     "supertest": "~0.8.2",
