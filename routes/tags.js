@@ -77,7 +77,7 @@ module.exports = function(app) {
     // TODO: replace dummy values
     var data = {
       tagsUrl:     "http://example.com/clients/" + clientId + "/tags",
-      authorName:  config.service_provider_id,
+      authorName:  config.service_provider.name,
       // TODO: replace this with a better unique id value
       uniqueId:    "urn:radiotag:client:" + clientId
     };

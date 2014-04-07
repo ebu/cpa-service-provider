@@ -22,4 +22,7 @@ exports.authorization_provider = {
   modes:             ["client", "user"]
 };
 
-exports.service_provider_id = process.env.SERVICE_PROVIDER_ID || 'STATION_NAME';
+exports.service_provider = {
+  name:   process.env.SERVICE_PROVIDER_ID || "STATION_NAME",
+  scope:  "https://sp.example.com/"
+};
