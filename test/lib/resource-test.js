@@ -42,7 +42,7 @@ describe("Accessing a protected resource", function() {
       before(function(done) {
         var config = app.get('config');
 
-        nock(config.uris.authorization_uri)
+        nock(config.authorization_provider.base_uri)
           .post('/authorized')
           .reply(200, { client_id: 11, user_id: 12 });
 
@@ -113,7 +113,7 @@ describe("Accessing a protected resource", function() {
       before(function(done) {
         var config = app.get('config');
 
-        nock(config.uris.authorization_uri)
+        nock(config.authorization_provider.base_uri)
           .post('/authorized')
           .reply(200, { client_id: 11, user_id: 12 });
 
@@ -183,7 +183,7 @@ describe("Accessing a protected resource", function() {
       before(function(done) {
         var config = app.get('config');
 
-        nock(config.uris.authorization_uri)
+        nock(config.authorization_provider.base_uri)
           .post('/authorized')
           .reply(200, { client_id: 11, user_id: null });
 
@@ -247,7 +247,7 @@ describe("Accessing a protected resource", function() {
       before(function(done) {
         var config = app.get('config');
 
-        nock(config.uris.authorization_uri)
+        nock(config.authorization_provider.base_uri)
           .post('/authorized')
           .reply(200, { client_id: 11, user_id: 13 });
 
@@ -317,8 +317,19 @@ describe("Accessing a protected resource", function() {
       requestHelper.sendRequest(this, '/resource', { accessToken: null }, done);
     });
 
-    it("should return an 'unauthorized' error", function() {
-      assertions.verifyError(this.res, 401, 'unauthorized');
+    it("should return status 401", function() {
+      expect(this.res.statusCode).to.equal(401);
+    });
+
+    // jshint expr:true
+    it("should return a www-authenticate header", function() {
+      expect(this.res.headers['www-authenticate']).to.equal('CPA name="Example AP" uri="https://ap.example.com" modes="client,user"');
+    });
+
+    // jshint expr:true
+    it("should return an empty response body", function() {
+      // expect(this.res.text).to.be.equal("");
+      expect(this.res.text).to.be.empty;
     });
   });
 
@@ -326,27 +337,21 @@ describe("Accessing a protected resource", function() {
     before(function(done) {
       var config = app.get('config');
 
-      nock(config.uris.authorization_uri)
+      nock(config.authorization_provider.base_uri)
         .post('/authorized')
         .reply(401);
 
       requestHelper.sendRequest(this, '/resource', { accessToken: 'abc123' }, done);
     });
 
-    it("should return an unauthorized error", function() {
-      assertions.verifyError(this.res, 401, 'unauthorized');
+    // jshint expr:true
+    it("should return a www-authenticate header", function() {
+      expect(this.res.headers['www-authenticate']).to.equal('CPA name="Example AP" uri="https://ap.example.com" modes="client,user"');
     });
 
-    describe("the response body", function() {
-      it("should include the authorization uri", function() {
-        expect(this.res.body).to.have.property('authorization_uri');
-        expect(this.res.body.authorization_uri).to.equal('http://ap.example.com');
-      });
-
-      it("should include the service provider id", function() {
-        expect(this.res.body).to.have.property('service_provider_id');
-        expect(this.res.body.service_provider_id).to.equal('BBC1');
-      });
+    // jshint expr:true
+    it("should return an empty response body", function() {
+      expect(this.res.text).to.be.empty;
     });
   });
 
@@ -367,7 +372,7 @@ describe("Accessing a protected resource", function() {
     before(function(done) {
       var config = app.get('config');
 
-      nock(config.uris.authorization_uri)
+      nock(config.authorization_provider.base_uri)
         .post('/authorized')
         .reply(500);
 
@@ -385,7 +390,7 @@ describe("Accessing a protected resource", function() {
     before(function(done) {
       var config = app.get('config');
 
-      nock(config.uris.authorization_uri)
+      nock(config.authorization_provider.base_uri)
         .post('/authorized')
         .reply(200, { client_id: null, user_id: null });
 
@@ -403,7 +408,7 @@ describe("Accessing a protected resource", function() {
     before(function(done) {
       var config = app.get('config');
 
-      nock(config.uris.authorization_uri)
+      nock(config.authorization_provider.base_uri)
         .post('/authorized')
         .reply(200, { client_id: 'invalid', user_id: null });
 
@@ -421,7 +426,7 @@ describe("Accessing a protected resource", function() {
     before(function(done) {
       var config = app.get('config');
 
-      nock(config.uris.authorization_uri)
+      nock(config.authorization_provider.base_uri)
         .post('/authorized')
         .reply(200, { client_id: 11, user_id: 'invalid' });
 
@@ -439,7 +444,7 @@ describe("Accessing a protected resource", function() {
     before(function(done) {
       var config = app.get('config');
 
-      nock(config.uris.authorization_uri)
+      nock(config.authorization_provider.base_uri)
         .post('/authorized')
         .reply(200, "invalid");
 

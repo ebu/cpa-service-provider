@@ -85,7 +85,7 @@ describe("GET /tags", function() {
     before(function(done) {
       var config = app.get('config');
 
-      nock(config.uris.authorization_uri)
+      nock(config.authorization_provider.base_uri)
         .post('/authorized')
         .reply(200, { client_id: 11, user_id: 12 });
 
@@ -220,15 +220,21 @@ describe("GET /tags", function() {
     before(function(done) {
       var config = app.get('config');
 
-      nock(config.uris.authorization_uri)
+      nock(config.authorization_provider.base_uri)
         .post('/authorized')
         .reply(401);
 
       requestHelper.sendRequest(this, '/tags', { accessToken: '456def' }, done);
     });
 
-    it("should return an 'unauthorized' error", function() {
-      assertions.verifyError(this.res, 401, 'unauthorized');
+    // jshint expr:true
+    it("should return a www-authenticate header", function() {
+      expect(this.res.headers['www-authenticate']).to.equal('CPA name="Example AP" uri="https://ap.example.com" modes="client,user"');
+    });
+
+    // jshint expr:true
+    it("should return an empty response body", function() {
+      expect(this.res.text).to.be.empty;
     });
   });
 });
@@ -240,7 +246,7 @@ describe("POST /tag", function() {
     before(function(done) {
       var config = app.get('config');
 
-      nock(config.uris.authorization_uri)
+      nock(config.authorization_provider.base_uri)
         .post('/authorized')
         .reply(200, { user_id: 11, client_id: 12 });
 
@@ -407,7 +413,7 @@ describe("POST /tag", function() {
     before(function(done) {
       var config = app.get('config');
 
-      nock(config.uris.authorization_uri)
+      nock(config.authorization_provider.base_uri)
         .post('/authorized')
         .reply(200, { user_id: 11, client_id: 12 });
 
@@ -434,7 +440,7 @@ describe("POST /tag", function() {
     before(function(done) {
       var config = app.get('config');
 
-      nock(config.uris.authorization_uri)
+      nock(config.authorization_provider.base_uri)
         .post('/authorized')
         .reply(200, { user_id: 11, client_id: 12 });
 
@@ -461,7 +467,7 @@ describe("POST /tag", function() {
     before(function(done) {
       var config = app.get('config');
 
-      nock(config.uris.authorization_uri)
+      nock(config.authorization_provider.base_uri)
         .post('/authorized')
         .reply(200, { user_id: 11, client_id: 12 });
 
