@@ -9,13 +9,13 @@ More information on the [EBU Cross-Platform Authentication project](http://tech.
 
 Ensure your system has [Node.js](http://nodejs.org/) (v0.10 or later) and NPM installed.
 
-## Getting Started
+## Getting started
 
     $ git clone https://github.com/ebu/cpa-service-provider.git
     $ cd cpa-service-provider
     $ npm install
 
-## Run the Tests
+## Run the tests
 
     $ mkdir data
     $ NODE_ENV=test bin/init-db
@@ -32,13 +32,17 @@ An example config for reference is in `config.dist.js`.
 Edit `config.local.js` to set any necessary configuration options, for
 example, database connection settings.
 
-## Initialise the Database
+## Initialise the database
 
     $ NODE_ENV=development bin/init-db
 
 ## Start the Server
 
     $ bin/server
+
+Specify `--help` to see available command-line options:
+
+    $ bin/server --help
 
 ## Development
 
@@ -50,7 +54,23 @@ As general-purpose tools, these should be installed globally:
 
     $ sudo npm install -g jshint istanbul jsdoc
 
-## Related Projects
+To verify the code using JSHint and run the unit tests:
+
+    $ make
+
+To verify the code using JSHint:
+
+    $ make lint
+
+To run the unit tests:
+
+    $ make test
+
+To generate a test coverage report (in the `coverage` directory);
+
+    $ make coverage
+
+## Related projects
 
 * [CPA Authentication Provider](https://github.com/ebu/cpa-auth-provider)
 * [CPA Client](https://github.com/ebu/cpa-client)
@@ -62,7 +82,7 @@ As general-purpose tools, these should be installed globally:
 * [Michael Barroco](https://github.com/barroco) (EBU)
 
 
-## Copyright & License
+## Copyright & license
 
 Copyright (c) 2014, EBU-UER Technology & Innovation
 
