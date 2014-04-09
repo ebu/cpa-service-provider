@@ -46,7 +46,7 @@ describe("Accessing a protected resource", function() {
           .post('/authorized')
           .reply(200, { client_id: 11, user_id: 12 });
 
-        requestHelper.sendRequest(this, '/resource', { accessToken: '123abc' }, done);
+        requestHelper.sendRequest(this, '/resource', { accessToken: '123abc', scope: config.service_provider.scope }, done);
       });
 
       it("should return status 200", function() {

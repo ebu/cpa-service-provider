@@ -17,4 +17,7 @@ exports.authorization_provider = {
   modes:             ["client", "user"]
 };
 
-exports.service_provider_id = 'BBC1';
+exports.service_provider = {
+  name:   "BBC1",
+  scope:  "https://sp.example.com/"
+};
