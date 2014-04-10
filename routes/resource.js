@@ -9,6 +9,11 @@ module.exports = function(app) {
   var protectedResourceHandler =
     require('../lib/protected-resource-handler')(config, db, logger);
 
+  /**
+   * Example protected resource endpoint, which simply returns a greeting
+   * to the client or user.
+   */
+
   app.get('/resource', protectedResourceHandler, function(req, res) {
     var message = config.service_provider.name + " says: Hello ";
 
