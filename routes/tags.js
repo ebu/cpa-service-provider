@@ -110,6 +110,10 @@ module.exports = function(app) {
   var protectedResourceHandler =
     require('../lib/protected-resource-handler')(config, db, logger);
 
+  /**
+   * RadioTag tag list endpoint
+   */
+
   app.get('/tags', protectedResourceHandler, function(req, res) {
     if (req.device.user_id) {
       // Get all the tags from this user's devices.
@@ -144,7 +148,9 @@ module.exports = function(app) {
     }
   });
 
-  /*
+  /**
+   * RadioTag tag creation endpoint
+   *
    * Parameters:
    * - station: radio station identifier
    * - time: timestamp of tag (seconds since the Unix epoch)
@@ -189,6 +195,10 @@ module.exports = function(app) {
         }
       });
   });
+
+  /**
+   * Returns an HTML page listing all stored tags.
+   */
 
   app.get('/tags/all', function(req, res) {
     db.Tag.findAll({ include: [db.Client], order: 'time DESC' })
