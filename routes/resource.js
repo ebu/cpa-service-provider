@@ -18,7 +18,13 @@ module.exports = function(app) {
     var message = config.service_provider.name + " says: Hello ";
 
     if (req.user) {
-      message += "user " + req.user.id + "!";
+      var user = req.user.display_name;
+
+      if (!user) {
+        user = "user " + req.user.id;
+      }
+
+      message += user + "!";
     }
     else if (req.device) {
       message += "client " + req.device.id + "!";
