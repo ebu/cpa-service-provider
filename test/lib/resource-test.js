@@ -27,8 +27,8 @@ var createClient = function(id, userId, done) {
     });
 };
 
-var createUser = function(id, done) {
-  db.User.create({ id: id })
+var createUser = function(id, displayName, done) {
+  db.User.create({ id: id, display_name: displayName })
     .complete(function(err, user) {
       done(err);
     });
@@ -44,7 +44,7 @@ describe("Accessing a protected resource", function() {
 
         nock(config.authorization_provider.base_uri)
           .post('/authorized')
-          .reply(200, { client_id: 11, user_id: 12 });
+          .reply(200, { client_id: 11, user_id: 12, display_name: 'Alice' });
 
         requestHelper.sendRequest(this, '/resource', { accessToken: '123abc', scope: config.service_provider.scope }, done);
       });
@@ -61,7 +61,7 @@ describe("Accessing a protected resource", function() {
 
       it("should return the protected resource", function() {
         expect(this.res.body).to.deep.equal({
-          message: 'BBC1 says: Hello user 12!'
+          message: 'BBC1 says: Hello Alice!'
         });
       });
 
@@ -95,6 +95,7 @@ describe("Accessing a protected resource", function() {
           expect(this.users).to.be.ok;
           expect(this.users.length).to.equal(1);
           expect(this.users[0].id).to.equal(12);
+          expect(this.users[0].display_name).to.equal('Alice');
         });
 
         describe("the client", function() {
@@ -107,7 +108,7 @@ describe("Accessing a protected resource", function() {
 
     context("with an existing client and user in the database", function() {
       before(clearDatabase);
-      before(function(done) { createUser(12, done); });
+      before(function(done) { createUser(12, 'Alice', done); });
       before(function(done) { createClient(11, 12, done); });
 
       before(function(done) {
@@ -115,7 +116,7 @@ describe("Accessing a protected resource", function() {
 
         nock(config.authorization_provider.base_uri)
           .post('/authorized')
-          .reply(200, { client_id: 11, user_id: 12 });
+          .reply(200, { client_id: 11, user_id: 12, display_name: 'ALICE' });
 
         requestHelper.sendRequest(this, '/resource', { accessToken: '123abc' }, done);
       });
@@ -132,7 +133,7 @@ describe("Accessing a protected resource", function() {
 
       it("should return the protected resource", function() {
         expect(this.res.body).to.deep.equal({
-          message: 'BBC1 says: Hello user 12!'
+          message: 'BBC1 says: Hello ALICE!'
         });
       });
 
@@ -166,6 +167,12 @@ describe("Accessing a protected resource", function() {
           expect(this.users).to.be.ok;
           expect(this.users.length).to.equal(1);
           expect(this.users[0].id).to.equal(12);
+        });
+
+        describe("the user", function() {
+          it("should have updated display name", function() {
+            expect(this.users[0].display_name).to.equal('ALICE');
+          });
         });
 
         describe("the client", function() {
@@ -241,7 +248,7 @@ describe("Accessing a protected resource", function() {
 
     context("with an existing client in the database, associated with a different user", function() {
       before(clearDatabase);
-      before(function(done) { createUser(12, done); });
+      before(function(done) { createUser(12, 'Bob', done); });
       before(function(done) { createClient(11, 12, done); });
 
       before(function(done) {
@@ -249,7 +256,7 @@ describe("Accessing a protected resource", function() {
 
         nock(config.authorization_provider.base_uri)
           .post('/authorized')
-          .reply(200, { client_id: 11, user_id: 13 });
+          .reply(200, { client_id: 11, user_id: 13, display_name: 'Fred' });
 
         requestHelper.sendRequest(this, '/resource', { accessToken: '123abc' }, done);
       });
@@ -266,7 +273,7 @@ describe("Accessing a protected resource", function() {
 
       it("should return the protected resource", function() {
         expect(this.res.body).to.deep.equal({
-          message: 'BBC1 says: Hello user 13!'
+          message: 'BBC1 says: Hello Fred!'
         });
       });
 
@@ -300,7 +307,9 @@ describe("Accessing a protected resource", function() {
           expect(this.users).to.be.ok;
           expect(this.users.length).to.equal(2);
           expect(this.users[0].id).to.equal(12);
+          expect(this.users[0].display_name).to.equal('Bob');
           expect(this.users[1].id).to.equal(13);
+          expect(this.users[1].display_name).to.equal('Fred');
         });
 
         describe("the client", function() {
@@ -308,6 +317,36 @@ describe("Accessing a protected resource", function() {
             expect(this.clients[0].user_id).to.equal(13);
           });
         });
+      });
+    });
+  });
+
+  context("with a user with no display name", function() {
+    before(clearDatabase);
+
+    before(function(done) {
+      var config = app.get('config');
+
+      nock(config.authorization_provider.base_uri)
+        .post('/authorized')
+        .reply(200, { client_id: 11, user_id: 12, display_name: null });
+
+      requestHelper.sendRequest(this, '/resource', { accessToken: '123abc', scope: config.service_provider.scope }, done);
+    });
+
+    it("should return status 200", function() {
+      expect(this.res.statusCode).to.equal(200);
+    });
+
+    // jshint expr:true
+    it("should return JSON", function() {
+      expect(this.res.headers['content-type']).to.equal('application/json; charset=utf-8');
+      expect(this.res.body).to.be.ok;
+    });
+
+    it("should return the protected resource, using the user id", function() {
+      expect(this.res.body).to.deep.equal({
+        message: 'BBC1 says: Hello user 12!'
       });
     });
   });
@@ -321,14 +360,12 @@ describe("Accessing a protected resource", function() {
       expect(this.res.statusCode).to.equal(401);
     });
 
-    // jshint expr:true
     it("should return a www-authenticate header", function() {
       expect(this.res.headers['www-authenticate']).to.equal('CPA name="Example AP" uri="https://ap.example.com" modes="client,user"');
     });
 
     // jshint expr:true
     it("should return an empty response body", function() {
-      // expect(this.res.text).to.be.equal("");
       expect(this.res.text).to.be.empty;
     });
   });
@@ -344,7 +381,6 @@ describe("Accessing a protected resource", function() {
       requestHelper.sendRequest(this, '/resource', { accessToken: 'abc123' }, done);
     });
 
-    // jshint expr:true
     it("should return a www-authenticate header", function() {
       expect(this.res.headers['www-authenticate']).to.equal('CPA name="Example AP" uri="https://ap.example.com" modes="client,user"');
     });
@@ -428,7 +464,7 @@ describe("Accessing a protected resource", function() {
 
       nock(config.authorization_provider.base_uri)
         .post('/authorized')
-        .reply(200, { client_id: 11, user_id: 'invalid' });
+        .reply(200, { client_id: 11, user_id: 'invalid', display_name: '' });
 
       requestHelper.sendRequest(this, '/resource', { accessToken: '123abc' }, done);
     });

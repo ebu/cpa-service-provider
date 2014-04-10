@@ -5,6 +5,7 @@ module.exports = function(sequelize, DataTypes) {
     id: { type: DataTypes.INTEGER, primaryKey: true },
     username: DataTypes.STRING,
     password: DataTypes.STRING,
+    display_name: DataTypes.STRING
   }, {
     underscored: true,
 
