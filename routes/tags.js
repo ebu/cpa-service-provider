@@ -114,7 +114,7 @@ module.exports = function(app) {
    * RadioTag tag list endpoint
    */
 
-  app.get('/tags', protectedResourceHandler, function(req, res) {
+  app.get('/tags', protectedResourceHandler, function(req, res, next) {
     if (req.device.user_id) {
       // Get all the tags from this user's devices.
 
@@ -131,8 +131,7 @@ module.exports = function(app) {
           createAtomFeed(res, req.device.id, tags);
         },
         function(error) {
-          logger.error(error);
-          res.send(500);
+          next(error);
         });
     }
     else {
@@ -142,8 +141,7 @@ module.exports = function(app) {
           createAtomFeed(res, req.device.id, tags);
         },
         function(error) {
-          logger.error(error);
-          res.send(500);
+          next(error);
         });
     }
   });
@@ -156,7 +154,7 @@ module.exports = function(app) {
    * - time: timestamp of tag (seconds since the Unix epoch)
    */
 
-  app.post('/tag', protectedResourceHandler, function(req, res) {
+  app.post('/tag', protectedResourceHandler, function(req, res, next) {
     if (!req.body.station) {
       res.json(400, { error: 'missing/invalid station parameter' });
       return;
@@ -186,8 +184,7 @@ module.exports = function(app) {
       })
       .complete(function(err, tag) {
         if (err) {
-          logger.error(err);
-          res.send(500);
+          next(err);
         }
         else {
           res.statusCode = 201;
@@ -200,7 +197,7 @@ module.exports = function(app) {
    * Returns an HTML page listing all stored tags.
    */
 
-  app.get('/tags/all', function(req, res) {
+  app.get('/tags/all', function(req, res, next) {
     db.Tag.findAll({ include: [db.Client], order: 'time DESC' })
       .then(function(tags) {
         var tagInfo = tags.map(function(tag) {
@@ -217,8 +214,7 @@ module.exports = function(app) {
         res.render('tags.ejs', { tags: tagInfo });
       },
       function(error) {
-        logger.error(error);
-        res.send(500);
+        next(error);
       });
   });
 };
