@@ -6,7 +6,7 @@ describe('GET /', function() {
   beforeEach(function(done) {
     var self = this;
 
-    request(app).get('/').end(function(err, res) {
+    request.get('/').end(function(err, res) {
       self.res = res;
       done(err);
     });

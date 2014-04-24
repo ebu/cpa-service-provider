@@ -6,7 +6,7 @@ describe('GET /status', function() {
   before(function(done) {
     var self = this;
 
-    request(app)
+    request
       .get('/status')
       .end(function(err, res) {
         self.res = res;
