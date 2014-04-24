@@ -2,16 +2,15 @@
 
 var app = require('../../lib/app');
 var db  = require('../../models');
+var requestHelper = require('../request-helper');
 
 describe('PUT /user', function() {
   beforeEach(function(done) {
-    var self = this;
-
-    request(app).put('/user', 'NAME')
-      .end(function(err, res) {
-        self.res = res;
-        done(err);
-      });
+    requestHelper.sendRequest(this, '/user', {
+      method: 'put',
+      type:   'form',
+      data:   { username:'NAME' }
+    }, done);
   });
 
   // jshint expr:true
@@ -21,6 +20,7 @@ describe('PUT /user', function() {
     db.User
       .find({ where: { username: name } })
       .complete(function(err, user) {
+        expect(err).to.equal(null);
         expect(err).to.equal(null);
         expect(user).to.be.ok;
         expect(user.username).to.equal(name);

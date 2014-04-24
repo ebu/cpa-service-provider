@@ -10,8 +10,7 @@ module.exports = function(app) {
   app.put('/user', function(req, res) {
     db.User
       .create({
-        username: req.body.name,
-        password: 'hello'
+        username: req.body.username
       })
       .complete(function(err, user) {
         if (err) {
