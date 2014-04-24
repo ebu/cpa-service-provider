@@ -33,14 +33,6 @@ db.sequelize
       console.log('An error occurred while create the table.');
     } else {
       console.log('Synchronization done.');
-
-      if(process.env.NODE_ENV === 'development') {
-        db.Scope
-          .bulkCreate(config.scopes)
-          .success(function(result) {
-            console.log('Database populated');
-          });
-      }
     }
   });
 
