@@ -4,7 +4,7 @@ exports.db = {
   type: 'sqlite',
 
   // Database filename for SQLite
-  filename: 'test.sqlite',
+  // filename: 'test.sqlite',
 
   // For debugging, log SQL statements to the console
   debug: false
