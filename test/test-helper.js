@@ -1,8 +1,12 @@
-global.chai = require("chai");
-global.expect = chai.expect;
-global.sinon = require("sinon");
+"use strict";
 
-sinonChai = require("sinon-chai");
-chai.use(sinonChai);
+global.chai    = require("chai");
+global.expect  = global.chai.expect;
+global.sinon   = require("sinon");
 
-global.request = require("supertest");
+var sinonChai = require("sinon-chai");
+global.chai.use(sinonChai);
+
+var app = require('../lib/app');
+var supertest = require("supertest");
+global.request = supertest(app);
