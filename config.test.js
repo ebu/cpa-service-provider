@@ -15,11 +15,14 @@ module.exports = {
     name:              "Example AP",
     authorization_uri: "https://ap.example.com/authorized",
     base_uri:          "https://ap.example.com",
-    modes:             ["client", "user"]
+    modes:             ["client", "user"],
+    // Access token for making authenticated requests to the authorization
+    // provider
+    access_token:      "ce1a7ceda238478fabe827bacec7b8a4"
   },
 
   service_provider: {
-    name:   "BBC1",
-    scope:  "https://sp.example.com/"
+    name:  "BBC1",
+    scope: "https://sp.example.com/"
   }
 };

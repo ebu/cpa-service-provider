@@ -44,9 +44,18 @@ describe("Accessing a protected resource", function() {
 
         nock(config.authorization_provider.base_uri)
           .post('/authorized')
+          .matchHeader('authorization', 'Bearer ce1a7ceda238478fabe827bacec7b8a4')
           .reply(200, { client_id: 11, user_id: 12, display_name: 'Alice' });
 
-        requestHelper.sendRequest(this, '/resource', { accessToken: '123abc', scope: config.service_provider.scope }, done);
+        requestHelper.sendRequest(
+          this,
+          '/resource',
+          {
+            accessToken: '123abc',
+            scope: config.service_provider.scope
+          },
+          done
+        );
       });
 
       it("should return status 200", function() {
@@ -116,6 +125,7 @@ describe("Accessing a protected resource", function() {
 
         nock(config.authorization_provider.base_uri)
           .post('/authorized')
+          .matchHeader('authorization', 'Bearer ce1a7ceda238478fabe827bacec7b8a4')
           .reply(200, { client_id: 11, user_id: 12, display_name: 'ALICE' });
 
         requestHelper.sendRequest(this, '/resource', { accessToken: '123abc' }, done);
@@ -192,6 +202,7 @@ describe("Accessing a protected resource", function() {
 
         nock(config.authorization_provider.base_uri)
           .post('/authorized')
+          .matchHeader('authorization', 'Bearer ce1a7ceda238478fabe827bacec7b8a4')
           .reply(200, { client_id: 11, user_id: null });
 
         requestHelper.sendRequest(this, '/resource', { accessToken: '123abc' }, done);
@@ -256,6 +267,7 @@ describe("Accessing a protected resource", function() {
 
         nock(config.authorization_provider.base_uri)
           .post('/authorized')
+          .matchHeader('authorization', 'Bearer ce1a7ceda238478fabe827bacec7b8a4')
           .reply(200, { client_id: 11, user_id: 13, display_name: 'Fred' });
 
         requestHelper.sendRequest(this, '/resource', { accessToken: '123abc' }, done);
@@ -329,6 +341,7 @@ describe("Accessing a protected resource", function() {
 
       nock(config.authorization_provider.base_uri)
         .post('/authorized')
+        .matchHeader('authorization', 'Bearer ce1a7ceda238478fabe827bacec7b8a4')
         .reply(200, { client_id: 11, user_id: 12, display_name: null });
 
       requestHelper.sendRequest(this, '/resource', { accessToken: '123abc', scope: config.service_provider.scope }, done);
@@ -376,6 +389,7 @@ describe("Accessing a protected resource", function() {
 
       nock(config.authorization_provider.base_uri)
         .post('/authorized')
+        .matchHeader('authorization', 'Bearer ce1a7ceda238478fabe827bacec7b8a4')
         .reply(401);
 
       requestHelper.sendRequest(this, '/resource', { accessToken: 'abc123' }, done);
@@ -410,6 +424,7 @@ describe("Accessing a protected resource", function() {
 
       nock(config.authorization_provider.base_uri)
         .post('/authorized')
+        .matchHeader('authorization', 'Bearer ce1a7ceda238478fabe827bacec7b8a4')
         .reply(500);
 
       requestHelper.sendRequest(this, '/resource', { accessToken: 'abc123' }, done);
@@ -428,6 +443,7 @@ describe("Accessing a protected resource", function() {
 
       nock(config.authorization_provider.base_uri)
         .post('/authorized')
+        .matchHeader('authorization', 'Bearer ce1a7ceda238478fabe827bacec7b8a4')
         .reply(200, { client_id: null, user_id: null });
 
       requestHelper.sendRequest(this, '/resource', { accessToken: '123abc' }, done);
@@ -446,6 +462,7 @@ describe("Accessing a protected resource", function() {
 
       nock(config.authorization_provider.base_uri)
         .post('/authorized')
+        .matchHeader('authorization', 'Bearer ce1a7ceda238478fabe827bacec7b8a4')
         .reply(200, { client_id: 'invalid', user_id: null });
 
       requestHelper.sendRequest(this, '/resource', { accessToken: '123abc' }, done);
@@ -464,6 +481,7 @@ describe("Accessing a protected resource", function() {
 
       nock(config.authorization_provider.base_uri)
         .post('/authorized')
+        .matchHeader('authorization', 'Bearer ce1a7ceda238478fabe827bacec7b8a4')
         .reply(200, { client_id: 11, user_id: 'invalid', display_name: '' });
 
       requestHelper.sendRequest(this, '/resource', { accessToken: '123abc' }, done);
@@ -482,6 +500,7 @@ describe("Accessing a protected resource", function() {
 
       nock(config.authorization_provider.base_uri)
         .post('/authorized')
+        .matchHeader('authorization', 'Bearer ce1a7ceda238478fabe827bacec7b8a4')
         .reply(200, "invalid");
 
       requestHelper.sendRequest(this, '/resource', { accessToken: '123abc' }, done);
