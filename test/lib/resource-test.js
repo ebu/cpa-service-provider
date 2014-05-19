@@ -47,15 +47,7 @@ describe("Accessing a protected resource", function() {
           .matchHeader('authorization', 'Bearer ce1a7ceda238478fabe827bacec7b8a4')
           .reply(200, { client_id: 11, user_id: 12, display_name: 'Alice' });
 
-        requestHelper.sendRequest(
-          this,
-          '/resource',
-          {
-            accessToken: '123abc',
-            scope: config.service_provider.scope
-          },
-          done
-        );
+        requestHelper.sendRequest(this, '/resource', { accessToken: '123abc', domain: config.service_provider.domain }, done);
       });
 
       it("should return status 200", function() {
@@ -344,7 +336,7 @@ describe("Accessing a protected resource", function() {
         .matchHeader('authorization', 'Bearer ce1a7ceda238478fabe827bacec7b8a4')
         .reply(200, { client_id: 11, user_id: 12, display_name: null });
 
-      requestHelper.sendRequest(this, '/resource', { accessToken: '123abc', scope: config.service_provider.scope }, done);
+      requestHelper.sendRequest(this, '/resource', { accessToken: '123abc', domain: config.service_provider.domain }, done);
     });
 
     it("should return status 200", function() {

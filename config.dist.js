@@ -28,7 +28,7 @@ module.exports = {
   },
 
   service_provider: {
-    name:  process.env.SERVICE_PROVIDER_ID || "STATION_NAME",
-    scope: "https://sp.example.com/"
+    name:   process.env.SERVICE_PROVIDER_ID || "STATION_NAME",
+    domain: "sp.example.com"
   }
 };
