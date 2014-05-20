@@ -43,19 +43,11 @@ describe("Accessing a protected resource", function() {
         var config = app.get('config');
 
         nock(config.authorization_provider.base_uri)
-          .post('/authorized')
+          .post('/authorized', { access_token: '123abc', domain: 'sp.example.com' })
           .matchHeader('authorization', 'Bearer ce1a7ceda238478fabe827bacec7b8a4')
           .reply(200, { client_id: 11, user_id: 12, display_name: 'Alice' });
 
-        requestHelper.sendRequest(
-          this,
-          '/resource',
-          {
-            accessToken: '123abc',
-            scope: config.service_provider.scope
-          },
-          done
-        );
+        requestHelper.sendRequest(this, '/resource', { accessToken: '123abc', domain: config.service_provider.domain }, done);
       });
 
       it("should return status 200", function() {
@@ -124,7 +116,7 @@ describe("Accessing a protected resource", function() {
         var config = app.get('config');
 
         nock(config.authorization_provider.base_uri)
-          .post('/authorized')
+          .post('/authorized', { access_token: '123abc', domain: 'sp.example.com' })
           .matchHeader('authorization', 'Bearer ce1a7ceda238478fabe827bacec7b8a4')
           .reply(200, { client_id: 11, user_id: 12, display_name: 'ALICE' });
 
@@ -201,7 +193,7 @@ describe("Accessing a protected resource", function() {
         var config = app.get('config');
 
         nock(config.authorization_provider.base_uri)
-          .post('/authorized')
+          .post('/authorized', { access_token: '123abc', domain: 'sp.example.com' })
           .matchHeader('authorization', 'Bearer ce1a7ceda238478fabe827bacec7b8a4')
           .reply(200, { client_id: 11, user_id: null });
 
@@ -266,7 +258,7 @@ describe("Accessing a protected resource", function() {
         var config = app.get('config');
 
         nock(config.authorization_provider.base_uri)
-          .post('/authorized')
+          .post('/authorized', { access_token: '123abc', domain: 'sp.example.com' })
           .matchHeader('authorization', 'Bearer ce1a7ceda238478fabe827bacec7b8a4')
           .reply(200, { client_id: 11, user_id: 13, display_name: 'Fred' });
 
@@ -340,11 +332,11 @@ describe("Accessing a protected resource", function() {
       var config = app.get('config');
 
       nock(config.authorization_provider.base_uri)
-        .post('/authorized')
+        .post('/authorized', { access_token: '123abc', domain: 'sp.example.com' })
         .matchHeader('authorization', 'Bearer ce1a7ceda238478fabe827bacec7b8a4')
         .reply(200, { client_id: 11, user_id: 12, display_name: null });
 
-      requestHelper.sendRequest(this, '/resource', { accessToken: '123abc', scope: config.service_provider.scope }, done);
+      requestHelper.sendRequest(this, '/resource', { accessToken: '123abc', domain: config.service_provider.domain }, done);
     });
 
     it("should return status 200", function() {
@@ -374,7 +366,7 @@ describe("Accessing a protected resource", function() {
     });
 
     it("should return a www-authenticate header", function() {
-      expect(this.res.headers['www-authenticate']).to.equal('CPA name="Example AP" uri="https://ap.example.com" modes="client,user"');
+      expect(this.res.headers['www-authenticate']).to.equal('CPA version="1.0" name="Example AP" uri="https://ap.example.com" modes="client,user"');
     });
 
     // jshint expr:true
@@ -388,7 +380,7 @@ describe("Accessing a protected resource", function() {
       var config = app.get('config');
 
       nock(config.authorization_provider.base_uri)
-        .post('/authorized')
+        .post('/authorized', { access_token: 'abc123', domain: 'sp.example.com' })
         .matchHeader('authorization', 'Bearer ce1a7ceda238478fabe827bacec7b8a4')
         .reply(401);
 
@@ -396,7 +388,7 @@ describe("Accessing a protected resource", function() {
     });
 
     it("should return a www-authenticate header", function() {
-      expect(this.res.headers['www-authenticate']).to.equal('CPA name="Example AP" uri="https://ap.example.com" modes="client,user"');
+      expect(this.res.headers['www-authenticate']).to.equal('CPA version="1.0" name="Example AP" uri="https://ap.example.com" modes="client,user"');
     });
 
     // jshint expr:true
@@ -442,7 +434,7 @@ describe("Accessing a protected resource", function() {
       var config = app.get('config');
 
       nock(config.authorization_provider.base_uri)
-        .post('/authorized')
+        .post('/authorized', { access_token: '123abc', domain: 'sp.example.com' })
         .matchHeader('authorization', 'Bearer ce1a7ceda238478fabe827bacec7b8a4')
         .reply(200, { client_id: null, user_id: null });
 
@@ -461,7 +453,7 @@ describe("Accessing a protected resource", function() {
       var config = app.get('config');
 
       nock(config.authorization_provider.base_uri)
-        .post('/authorized')
+        .post('/authorized', { access_token: '123abc', domain: 'sp.example.com' })
         .matchHeader('authorization', 'Bearer ce1a7ceda238478fabe827bacec7b8a4')
         .reply(200, { client_id: 'invalid', user_id: null });
 
@@ -480,7 +472,7 @@ describe("Accessing a protected resource", function() {
       var config = app.get('config');
 
       nock(config.authorization_provider.base_uri)
-        .post('/authorized')
+        .post('/authorized', { access_token: '123abc', domain: 'sp.example.com' })
         .matchHeader('authorization', 'Bearer ce1a7ceda238478fabe827bacec7b8a4')
         .reply(200, { client_id: 11, user_id: 'invalid', display_name: '' });
 
@@ -499,7 +491,7 @@ describe("Accessing a protected resource", function() {
       var config = app.get('config');
 
       nock(config.authorization_provider.base_uri)
-        .post('/authorized')
+        .post('/authorized', { access_token: '123abc', domain: 'sp.example.com' })
         .matchHeader('authorization', 'Bearer ce1a7ceda238478fabe827bacec7b8a4')
         .reply(200, "invalid");
 

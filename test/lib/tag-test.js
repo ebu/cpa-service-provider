@@ -221,7 +221,7 @@ describe("GET /tags", function() {
       var config = app.get('config');
 
       nock(config.authorization_provider.base_uri)
-        .post('/authorized')
+        .post('/authorized', { access_token: '456def', domain: 'sp.example.com' })
         .reply(401);
 
       requestHelper.sendRequest(this, '/tags', { accessToken: '456def' }, done);
@@ -229,7 +229,7 @@ describe("GET /tags", function() {
 
     // jshint expr:true
     it("should return a www-authenticate header", function() {
-      expect(this.res.headers['www-authenticate']).to.equal('CPA name="Example AP" uri="https://ap.example.com" modes="client,user"');
+      expect(this.res.headers['www-authenticate']).to.equal('CPA version="1.0" name="Example AP" uri="https://ap.example.com" modes="client,user"');
     });
 
     // jshint expr:true

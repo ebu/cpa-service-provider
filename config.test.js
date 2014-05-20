@@ -22,7 +22,7 @@ module.exports = {
   },
 
   service_provider: {
-    name:  "BBC1",
-    scope: "https://sp.example.com/"
+    name:   "BBC1",
+    domain: "sp.example.com"
   }
 };
