@@ -54,6 +54,10 @@ describe("Accessing a protected resource", function() {
         expect(this.res.statusCode).to.equal(200);
       });
 
+      it("should not return a WWW-Authenticate header", function() {
+        expect(this.res.headers).to.not.have.property('www-authenticate');
+      });
+
       // jshint expr:true
       it("should return JSON", function() {
         expect(this.res.headers['content-type']).to.equal('application/json; charset=utf-8');
@@ -125,6 +129,10 @@ describe("Accessing a protected resource", function() {
 
       it("should return status 200", function() {
         expect(this.res.statusCode).to.equal(200);
+      });
+
+      it("should not return a WWW-Authenticate header", function() {
+        expect(this.res.headers).to.not.have.property('www-authenticate');
       });
 
       // jshint expr:true
@@ -204,6 +212,11 @@ describe("Accessing a protected resource", function() {
         expect(this.res.statusCode).to.equal(200);
       });
 
+      it("should return a WWW-Authenticate header that shows user mode is available", function() {
+        expect(this.res.headers).to.have.property('www-authenticate');
+        expect(this.res.headers['www-authenticate']).to.equal('CPA version="1.0" name="Example AP" uri="https://ap.example.com" modes="user"');
+      });
+
       // jshint expr:true
       it("should return JSON", function() {
         expect(this.res.headers['content-type']).to.equal('application/json; charset=utf-8');
@@ -267,6 +280,10 @@ describe("Accessing a protected resource", function() {
 
       it("should return status 200", function() {
         expect(this.res.statusCode).to.equal(200);
+      });
+
+      it("should not return a WWW-Authenticate header", function() {
+        expect(this.res.headers).to.not.have.property('www-authenticate');
       });
 
       // jshint expr:true
@@ -343,6 +360,10 @@ describe("Accessing a protected resource", function() {
       expect(this.res.statusCode).to.equal(200);
     });
 
+    it("should not return a WWW-Authenticate header", function() {
+      expect(this.res.headers).to.not.have.property('www-authenticate');
+    });
+
     // jshint expr:true
     it("should return JSON", function() {
       expect(this.res.headers['content-type']).to.equal('application/json; charset=utf-8');
@@ -387,7 +408,7 @@ describe("Accessing a protected resource", function() {
       requestHelper.sendRequest(this, '/resource', { accessToken: 'abc123' }, done);
     });
 
-    it("should return a www-authenticate header", function() {
+    it("should return a WWW-Authenticate header", function() {
       expect(this.res.headers['www-authenticate']).to.equal('CPA version="1.0" name="Example AP" uri="https://ap.example.com" modes="client,user"');
     });
 
