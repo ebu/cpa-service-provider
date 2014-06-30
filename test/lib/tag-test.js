@@ -222,13 +222,16 @@ describe("GET /tags", function() {
 
       nock(config.authorization_provider.base_uri)
         .post('/authorized', { access_token: '456def', domain: 'sp.example.com' })
-        .reply(401);
+        .reply(404);
 
       requestHelper.sendRequest(this, '/tags', { accessToken: '456def' }, done);
     });
 
-    // jshint expr:true
-    it("should return a www-authenticate header", function() {
+    it("should return status 401", function() {
+      expect(this.res.statusCode).to.equal(401);
+    });
+
+    it("should return a WWW-Authenticate header", function() {
       expect(this.res.headers['www-authenticate']).to.equal('CPA version="1.0" name="Example AP" uri="https://ap.example.com" modes="client,user"');
     });
 
