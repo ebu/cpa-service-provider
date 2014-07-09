@@ -387,6 +387,10 @@ describe("Accessing a protected resource", function() {
       requestHelper.sendRequest(this, '/resource', { accessToken: 'abc123' }, done);
     });
 
+    it("should return status 401", function() {
+      expect(this.res.statusCode).to.equal(401);
+    });
+
     it("should return a www-authenticate header", function() {
       expect(this.res.headers['www-authenticate']).to.equal('CPA version="1.0" name="Example AP" uri="https://ap.example.com" modes="client,user"');
     });
