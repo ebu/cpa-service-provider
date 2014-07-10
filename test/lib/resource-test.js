@@ -5,20 +5,9 @@ var db  = require('../../models');
 
 var assertions    = require('../assertions');
 var requestHelper = require('../request-helper');
+var dbHelper      = require('../db-helper');
 
 var nock = require('nock');
-
-var clearDatabase = function(done) {
-  db.sequelize.query('DELETE FROM Users').then(function() {
-    return db.sequelize.query('DELETE FROM Clients');
-  })
-  .then(function() {
-    done();
-  },
-  function(error) {
-    done(error);
-  });
-};
 
 var createClient = function(id, userId, done) {
   db.Client.create({ id: id, user_id: userId })
@@ -37,7 +26,7 @@ var createUser = function(id, displayName, done) {
 describe("Accessing a protected resource", function() {
   context("with a valid access token", function() {
     context("with no existing client or user in the database", function() {
-      before(clearDatabase);
+      before(dbHelper.clearDatabase);
 
       before(function(done) {
         var config = app.get('config');
@@ -112,7 +101,7 @@ describe("Accessing a protected resource", function() {
     });
 
     context("with an existing client and user in the database", function() {
-      before(clearDatabase);
+      before(dbHelper.clearDatabase);
       before(function(done) { createUser(12, 'Alice', done); });
       before(function(done) { createClient(11, 12, done); });
 
@@ -194,7 +183,7 @@ describe("Accessing a protected resource", function() {
     });
 
     context("with an existing client in the database, not associated with a user", function() {
-      before(clearDatabase);
+      before(dbHelper.clearDatabase);
       before(function(done) { createClient(11, null, done); });
 
       before(function(done) {
@@ -263,7 +252,7 @@ describe("Accessing a protected resource", function() {
     });
 
     context("with an existing client in the database, associated with a different user", function() {
-      before(clearDatabase);
+      before(dbHelper.clearDatabase);
       before(function(done) { createUser(12, 'Bob', done); });
       before(function(done) { createClient(11, 12, done); });
 
@@ -343,7 +332,7 @@ describe("Accessing a protected resource", function() {
   });
 
   context("with a user with no display name", function() {
-    before(clearDatabase);
+    before(dbHelper.clearDatabase);
 
     before(function(done) {
       var config = app.get('config');
@@ -479,7 +468,7 @@ describe("Accessing a protected resource", function() {
   });
 
   context("when the authorization server returns a null client_id", function() {
-    before(clearDatabase);
+    before(dbHelper.clearDatabase);
 
     before(function(done) {
       var config = app.get('config');
@@ -498,7 +487,7 @@ describe("Accessing a protected resource", function() {
   });
 
   context("when the authorization server returns an invalid client_id", function() {
-    before(clearDatabase);
+    before(dbHelper.clearDatabase);
 
     before(function(done) {
       var config = app.get('config');
@@ -517,7 +506,7 @@ describe("Accessing a protected resource", function() {
   });
 
   context("when the authorization server returns an invalid user_id", function() {
-    before(clearDatabase);
+    before(dbHelper.clearDatabase);
 
     before(function(done) {
       var config = app.get('config');
@@ -536,7 +525,7 @@ describe("Accessing a protected resource", function() {
   });
 
   context("when the authorization server returns invalid JSON", function() {
-    before(clearDatabase);
+    before(dbHelper.clearDatabase);
 
     before(function(done) {
       var config = app.get('config');

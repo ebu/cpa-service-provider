@@ -5,26 +5,12 @@ var db  = require('../../models');
 
 var assertions    = require('../assertions');
 var requestHelper = require('../request-helper');
+var dbHelper      = require('../db-helper');
 
 var nock      = require('nock');
 var xpath     = require('xpath');
 var DOMParser = require('xmldom').DOMParser;
 var cheerio   = require('cheerio');
-
-var clearDatabase = function(done) {
-  db.sequelize.query('DELETE FROM Users').then(function() {
-    return db.sequelize.query('DELETE FROM Clients');
-  })
-  .then(function() {
-    return db.sequelize.query('DELETE FROM Tags');
-  })
-  .then(function() {
-    done();
-  },
-  function(error) {
-    done(error);
-  });
-};
 
 var initDatabase = function(done) {
   db.User
@@ -64,6 +50,10 @@ var initDatabase = function(done) {
     });
 };
 
+var resetDatabase = function(done) {
+  return dbHelper.resetDatabase(initDatabase, done);
+};
+
 var verifyXPathNodeValue = function(doc, path, value) {
   var nodes = xpath.select(path, doc);
   expect(nodes.length).to.equal(1, "xpath " + path + " returned no elements");
@@ -77,7 +67,7 @@ var verifyXPathAttribute = function(doc, path, value) {
 };
 
 describe("GET /tags", function() {
-  before(clearDatabase);
+  before(dbHelper.clearDatabase);
 
   context("given a valid access token", function() {
     before(initDatabase);
@@ -244,7 +234,7 @@ describe("GET /tags", function() {
 
 describe("POST /tag", function() {
   context("given valid tag data", function() {
-    before(clearDatabase);
+    before(dbHelper.clearDatabase);
 
     before(function(done) {
       var config = app.get('config');
@@ -411,7 +401,7 @@ describe("POST /tag", function() {
   });
 
   context("with missing time", function() {
-    before(clearDatabase);
+    before(dbHelper.clearDatabase);
 
     before(function(done) {
       var config = app.get('config');
@@ -438,7 +428,7 @@ describe("POST /tag", function() {
   });
 
   context("with invalid time", function() {
-    before(clearDatabase);
+    before(dbHelper.clearDatabase);
 
     before(function(done) {
       var config = app.get('config');
@@ -465,7 +455,7 @@ describe("POST /tag", function() {
   });
 
   context("with missing station identifier", function() {
-    before(clearDatabase);
+    before(dbHelper.clearDatabase);
 
     before(function(done) {
       var config = app.get('config');
@@ -493,7 +483,7 @@ describe("POST /tag", function() {
 });
 
 describe("GET /tags/all", function() {
-  before(clearDatabase);
+  before(dbHelper.clearDatabase);
 
   context("with no tags in the database", function() {
     before(function(done) {
@@ -511,7 +501,7 @@ describe("GET /tags/all", function() {
   });
 
   context("with some tags in the database", function() {
-    before(initDatabase);
+    before(resetDatabase);
 
     before(function(done) {
       requestHelper.sendRequest(this, '/tags/all', { parseDOM: true }, done);
