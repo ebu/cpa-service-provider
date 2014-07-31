@@ -5,14 +5,14 @@
 var app     = require('../lib/app');
 var version = require('../package.json').version;
 
-var http     = require('http');
-var optimist = require('optimist');
+var http  = require('http');
+var yargs = require('yargs');
 
 var DEFAULT_PORT = 3000;
 
 // Parse command line arguments
 
-var argv = optimist
+var argv = yargs
   .usage("CPA Service Provider\n\nUsage:\n  $0 [options]")
   .help("help", "Display this help message")
   .alias("help", "h")
