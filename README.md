@@ -29,14 +29,17 @@ An example config for reference is in `config.dist.js`.
 
     $ cp config.dist.js config.local.js
 
-Edit `config.local.js` to set any necessary configuration options, for
-example, database connection settings.
+Edit `config.local.js` to set the necessary configuration options:
+
+* Database connection settings
+* Authorization Provider server URL and access token
+* Service provider domain name
 
 ## Initialise the database
 
     $ NODE_ENV=development bin/init-db
 
-## Start the Server
+## Start the server
 
     $ bin/server
 
@@ -75,12 +78,10 @@ To generate a test coverage report (in the `coverage` directory);
 * [CPA Authentication Provider](https://github.com/ebu/cpa-auth-provider)
 * [CPA Client](https://github.com/ebu/cpa-client)
 
-
 ## Contributors
 
 * [Chris Needham](https://github.com/chrisn) (BBC)
 * [Michael Barroco](https://github.com/barroco) (EBU)
-
 
 ## Copyright & license
 
