@@ -30,5 +30,13 @@ module.exports = {
   service_provider: {
     name:   process.env.SERVICE_PROVIDER_ID || "STATION_NAME",
     domain: "sp.example.com"
+  },
+
+  // Cross-origin resource sharing
+  cors: {
+    enabled: true,
+    allowed_domains: [
+      "http://cpa-client.ebu.io"
+    ]
   }
 };

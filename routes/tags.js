@@ -1,6 +1,8 @@
 "use strict";
 
-var db = require('../models');
+var config = require('../config');
+var cors   = require('../lib/cors');
+var db     = require('../models');
 
 var _ = require('lodash');
 var uuid = require('node-uuid');
@@ -30,7 +32,6 @@ module.exports = function(app) {
   };
 
   var tagToAtomEntry = function(tag) {
-
     // TODO: replace dummy values
     var entry = {
       title:         getTagTitle(tag),
@@ -73,7 +74,6 @@ module.exports = function(app) {
   };
 
   var createAtomFeed = function(res, clientId, tags) {
-
     // TODO: replace dummy values
     var data = {
       tagsUrl:     "http://example.com/clients/" + clientId + "/tags",
@@ -114,7 +114,7 @@ module.exports = function(app) {
    * RadioTag tag list endpoint
    */
 
-  app.get('/tags', protectedResourceHandler, function(req, res, next) {
+  var getTagsHandler = function(req, res, next) {
     if (req.device.user_id) {
       // Get all the tags from this user's devices.
 
@@ -144,7 +144,16 @@ module.exports = function(app) {
           next(error);
         });
     }
-  });
+  };
+
+  if (config.cors && config.cors.enabled) {
+    // Enable pre-flight CORS request for POST /token
+    app.options('/tags', cors);
+    app.get('/tags', cors, protectedResourceHandler, getTagsHandler);
+  }
+  else {
+    app.get('/tags', protectedResourceHandler, getTagsHandler);
+  }
 
   /**
    * RadioTag tag creation endpoint
@@ -154,7 +163,7 @@ module.exports = function(app) {
    * - time: timestamp of tag (seconds since the Unix epoch)
    */
 
-  app.post('/tag', protectedResourceHandler, function(req, res, next) {
+  var postTagHandler = function(req, res, next) {
     if (!req.body.station) {
       res.json(400, { error: 'missing/invalid station parameter' });
       return;
@@ -191,7 +200,16 @@ module.exports = function(app) {
           createAtomFeed(res, req.device.id, tag);
         }
       });
-  });
+  };
+
+  if (config.cors && config.cors.enabled) {
+    // Enable pre-flight CORS request for POST /token
+    app.options('/tag', cors);
+    app.post('/tag', cors, protectedResourceHandler, postTagHandler);
+  }
+  else {
+    app.post('/tag', protectedResourceHandler, postTagHandler);
+  }
 
   /**
    * Returns an HTML page listing all stored tags.
