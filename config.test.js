@@ -24,5 +24,8 @@ module.exports = {
   service_provider: {
     name:   "BBC1",
     domain: "sp.example.com"
-  }
+  },
+
+  // URL path namespace prefix
+  namespace: '/sp'
 };

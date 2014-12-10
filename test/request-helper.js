@@ -4,6 +4,8 @@ var cheerio = require('cheerio');
 
 module.exports = {
 
+  namespace: '',
+
   /**
    * Helper function for making HTTP requests and handling responses.
    *
@@ -30,6 +32,8 @@ module.exports = {
 
   sendRequest: function(context, path, opts, done) {
     opts = opts || {};
+
+    path = this.namespace + path;
 
     var method = opts.method || 'get';
 
