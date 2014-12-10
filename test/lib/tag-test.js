@@ -10,7 +10,6 @@ var dbHelper      = require('../db-helper');
 var nock      = require('nock');
 var xpath     = require('xpath');
 var DOMParser = require('xmldom').DOMParser;
-var cheerio   = require('cheerio');
 
 var initDatabase = function(done) {
   db.User
