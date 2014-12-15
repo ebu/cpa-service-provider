@@ -40,6 +40,6 @@ module.exports = {
     ]
   },
 
-  // URL path namespace prefix, e.g., '/sp'
-  namespace: ''
+  // URL path prefix, e.g., '/myapp'
+  urlPrefix: ''
 };

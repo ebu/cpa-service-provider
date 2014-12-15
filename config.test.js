@@ -26,6 +26,6 @@ module.exports = {
     domain: "sp.example.com"
   },
 
-  // URL path namespace prefix, e.g., '/sp'
-  namespace: ''
+  // URL path prefix, e.g., '/myapp'
+  urlPrefix: ''
 };
