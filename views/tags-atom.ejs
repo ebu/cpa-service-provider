@@ -12,8 +12,7 @@
   <% entries.forEach(function(entry) { %>
     <entry>
       <title><%= entry.title %></title>
-      <radiotag:sid><%= entry.serviceId %></radiotag:sid>
-      <radiotag:service><%= entry.serviceName %></radiotag:service>
+      <radiotag:service uri="<%= entry.serviceUri %>"><%= entry.serviceName %></radiotag:service>
       <link rel="image" href="<%= entry.imageUrl %>"/>
       <link rel="canonical" href="<%= entry.canonicalUrl %>"/>
       <id><%= entry.uniqueId %></id>

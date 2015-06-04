@@ -24,21 +24,21 @@ module.exports = function(app) {
   };
 
   var getTagTitle = function(tag) {
-    return "Tag: " + tag.station + " at " + formatAtomDate(tag.time);
+    return "Tag: " + tag.bearer + " at " + formatAtomDate(tag.time);
   };
 
   var getTagDescription = function(tag) {
-    return "Description of tag: " + tag.station + " at " + formatAtomDate(tag.time);
+    return "Description of tag: " + tag.bearer + " at " + formatAtomDate(tag.time);
   };
 
   var tagToAtomEntry = function(tag) {
     // TODO: replace dummy values
     var entry = {
       title:         getTagTitle(tag),
-      serviceId:     tag.station,
-      serviceName:   tag.station,
+      serviceUri:    tag.bearer,
+      serviceName:   tag.bearer,
       imageUrl:      "http://example.com/image.png",
-      canonicalUrl:  "http://example.com/" + tag.station + "/" + dateToSeconds(tag.time),
+      canonicalUrl:  "http://example.com/" + tag.bearer + "/" + dateToSeconds(tag.time),
       uniqueId:      "urn:uuid:" + tag.id,
       dateUpdated:   formatAtomDate(tag.time),
       datePublished: formatAtomDate(tag.time),
@@ -159,13 +159,13 @@ module.exports = function(app) {
    * RadioTag tag creation endpoint
    *
    * Parameters:
-   * - station: radio station identifier
+   * - bearer: radio service TX params
    * - time: timestamp of tag (seconds since the Unix epoch)
    */
 
   var postTagHandler = function(req, res, next) {
-    if (!req.body.station) {
-      res.json(400, { error: 'missing/invalid station parameter' });
+    if (!req.body.bearer) {
+      res.json(400, { error: 'missing/invalid bearer parameter' });
       return;
     }
 
@@ -186,10 +186,11 @@ module.exports = function(app) {
 
     db.Tag
       .create({
-        id:        uuid.v4(),
-        station:   req.body.station,
-        time:      time,
-        client_id: req.device.id
+        id:          uuid.v4(),
+        bearer:      req.body.bearer,
+        time:        time,
+        time_source: req.body.time_source,
+        client_id:   req.device.id
       })
       .complete(function(err, tag) {
         if (err) {
@@ -223,7 +224,8 @@ module.exports = function(app) {
             client:      tag.client_id,
             user:        tag.client.user_id,
             time:        formatAtomDate(tag.time),
-            station:     tag.station,
+            time_source: tag.time_source,
+            bearer:      tag.bearer,
             title:       getTagTitle(tag),
             description: getTagDescription(tag)
           };

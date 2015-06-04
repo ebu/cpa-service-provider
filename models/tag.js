@@ -7,7 +7,7 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true,
       allowNull: false
     },
-    station: {
+    bearer: {
       type: DataTypes.STRING,
       validate: {
         notEmpty: true
@@ -15,6 +15,10 @@ module.exports = function(sequelize, DataTypes) {
     },
     time: {
       type: DataTypes.DATE
+    },
+    time_source: {
+      type: DataTypes.STRING,
+      allowNull: true
     }
   }, {
     underscored: true,

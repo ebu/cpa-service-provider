@@ -19,26 +19,29 @@ var initDatabase = function(done) {
     })
     .then(function() {
       return db.Tag.create({
-        id:        'cc5355c3-93f1-4616-9a54-9093a0c656fc',
-        client_id: 11,
-        station:   'radio1',
-        time:      new Date(1391017811000)
+        id:          'cc5355c3-93f1-4616-9a54-9093a0c656fc',
+        client_id:   11,
+        bearer:      'radio1',
+        time:        new Date(1391017811000),
+        time_source: 'broadcast'
       });
     })
     .then(function() {
       return db.Tag.create({
-        id:        '4575bf06-9919-4237-9eb7-8c4f42885774',
-        client_id: 11,
-        station:   'radio2',
-        time:      new Date(1391017812000)
+        id:          '4575bf06-9919-4237-9eb7-8c4f42885774',
+        client_id:   11,
+        bearer:      'radio2',
+        time:        new Date(1391017812000),
+        time_source: 'broadcast'
       });
     })
     .then(function() {
       return db.Tag.create({
-        id:        'e39ec3f6-09c9-4b58-82c1-70782aa8ad7c',
-        client_id: 11,
-        station:   'radio3',
-        time:      new Date(1391017810000)
+        id:          'e39ec3f6-09c9-4b58-82c1-70782aa8ad7c',
+        client_id:   11,
+        bearer:      'radio3',
+        time:        new Date(1391017810000),
+        time_source: 'broadcast'
       });
     })
     .then(function() {
@@ -137,16 +140,16 @@ describe("GET /tags", function() {
           });
         });
 
-        describe("the radiotag:sid field", function() {
-          it("should equal the tag's station identifier", function() {
-            verifyXPathNodeValue(this.doc, "/feed/entry[1]/*[local-name(.)='sid']", 'radio2');
-            verifyXPathNodeValue(this.doc, "/feed/entry[2]/*[local-name(.)='sid']", 'radio1');
-            verifyXPathNodeValue(this.doc, "/feed/entry[3]/*[local-name(.)='sid']", 'radio3');
+        describe("the radiotag:service field uri attribute", function() {
+          it("should equal the tag's radio service bearer URI", function() {
+            verifyXPathAttribute(this.doc, "/feed/entry[1]/*[local-name(.)='service']/@uri", 'radio2');
+            verifyXPathAttribute(this.doc, "/feed/entry[2]/*[local-name(.)='service']/@uri", 'radio1');
+            verifyXPathAttribute(this.doc, "/feed/entry[3]/*[local-name(.)='service']/@uri", 'radio3');
           });
         });
 
         describe("the radiotag:service field", function() {
-          it("should equal the tag's station name", function() {
+          it("should equal the tag's radio service name", function() {
             // TODO: should be station display local-name
             verifyXPathNodeValue(this.doc, "/feed/entry[1]/*[local-name(.)='service']", 'radio2');
             verifyXPathNodeValue(this.doc, "/feed/entry[2]/*[local-name(.)='service']", 'radio1');
@@ -243,8 +246,9 @@ describe("POST /tag", function() {
         .reply(200, { user_id: 11, client_id: 12 });
 
       var data = {
-        station: 'radio1',
-        time: 1390981693
+        bearer:  'radio1',
+        time: 1390981693,
+        time_source: 'broadcast'
       };
 
       requestHelper.sendRequest(this, '/tag', {
@@ -308,9 +312,9 @@ describe("POST /tag", function() {
           });
         });
 
-        describe("the radiotag:sid field", function() {
-          it("should equal the tag's station identifier", function() {
-            verifyXPathNodeValue(this.doc, "/feed/entry/*[local-name(.)='sid']", 'radio1');
+        describe("the radiotag:service uri attribute", function() {
+          it("should equal the tag's service bearer URI", function() {
+            verifyXPathAttribute(this.doc, "/feed/entry/*[local-name(.)='service']/@uri", 'radio1');
           });
         });
 
@@ -389,7 +393,7 @@ describe("POST /tag", function() {
         });
 
         it("should have the correct station identifier", function() {
-          expect(this.tag.station).to.equal('radio1');
+          expect(this.tag.bearer).to.equal('radio1');
         });
 
         it("should be associated with the correct client id", function() {
@@ -410,8 +414,9 @@ describe("POST /tag", function() {
         .reply(200, { user_id: 11, client_id: 12 });
 
       var data = {
-        station: 'radio1'
-        // time: 1390981693
+        bearer:  'radio1',
+        // time: 1390981693,
+        time_source: 'broadcast'
       };
 
       requestHelper.sendRequest(this, '/tag', {
@@ -437,8 +442,9 @@ describe("POST /tag", function() {
         .reply(200, { user_id: 11, client_id: 12 });
 
       var data = {
-        station: 'radio1',
-        time: 'invalid'
+        bearer:  'radio1',
+        time: 'invalid',
+        time_source: 'broadcast'
       };
 
       requestHelper.sendRequest(this, '/tag', {
@@ -453,7 +459,7 @@ describe("POST /tag", function() {
     });
   });
 
-  context("with missing station identifier", function() {
+  context("with missing service bearer", function() {
     before(dbHelper.clearDatabase);
 
     before(function(done) {
@@ -464,8 +470,9 @@ describe("POST /tag", function() {
         .reply(200, { user_id: 11, client_id: 12 });
 
       var data = {
-        // station: 'radio1',
-        time: 1390981693
+        // bearer:  'radio1',
+        time: 1390981693,
+        time_source: 'broadcast'
       };
 
       requestHelper.sendRequest(this, '/tag', {
@@ -477,6 +484,34 @@ describe("POST /tag", function() {
 
     it("should return status 400", function() {
       expect(this.res.statusCode).to.equal(400);
+    });
+  });
+
+  context("with missing time source", function() {
+    before(dbHelper.clearDatabase);
+
+    before(function(done) {
+      var config = app.get('config');
+
+      nock(config.authorization_provider.base_uri)
+        .post('/authorized')
+        .reply(200, { user_id: 11, client_id: 12 });
+
+      var data = {
+        bearer: 'radio1',
+        time: 1390981693,
+        // time_source: 'broadcast'
+      };
+
+      requestHelper.sendRequest(this, '/tag', {
+        method:      'post',
+        data:        data,
+        accessToken: '123abc'
+      }, done);
+    });
+
+    it("should return status 201", function() {
+      expect(this.res.statusCode).to.equal(201);
     });
   });
 });
