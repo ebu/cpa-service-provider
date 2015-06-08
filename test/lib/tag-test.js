@@ -68,7 +68,7 @@ var verifyXPathAttribute = function(doc, path, value) {
   expect(nodes[0].nodeValue).to.equal(value);
 };
 
-describe("GET /tags", function() {
+describe("GET /radiodns/tag/1/tags", function() {
   before(dbHelper.clearDatabase);
 
   context("given a valid access token", function() {
@@ -81,7 +81,7 @@ describe("GET /tags", function() {
         .post('/authorized')
         .reply(200, { client_id: 11, user_id: 12 });
 
-      requestHelper.sendRequest(this, '/tags', { accessToken: '123abc' }, done);
+      requestHelper.sendRequest(this, '/radiodns/tag/1/tags', { accessToken: '123abc' }, done);
     });
 
     it("should return status 200", function() {
@@ -216,7 +216,7 @@ describe("GET /tags", function() {
         .post('/authorized', { access_token: '456def', domain: 'sp.example.com' })
         .reply(404);
 
-      requestHelper.sendRequest(this, '/tags', { accessToken: '456def' }, done);
+      requestHelper.sendRequest(this, '/radiodns/tag/1/tags', { accessToken: '456def' }, done);
     });
 
     it("should return status 401", function() {
@@ -234,7 +234,7 @@ describe("GET /tags", function() {
   });
 });
 
-describe("POST /tag", function() {
+describe("POST /radiodns/tag/1/tag", function() {
   context("given valid tag data", function() {
     before(dbHelper.clearDatabase);
 
@@ -251,7 +251,7 @@ describe("POST /tag", function() {
         time_source: 'broadcast'
       };
 
-      requestHelper.sendRequest(this, '/tag', {
+      requestHelper.sendRequest(this, '/radiodns/tag/1/tag', {
         method:      'post',
         data:        data,
         accessToken: '123abc'
@@ -419,7 +419,7 @@ describe("POST /tag", function() {
         time_source: 'broadcast'
       };
 
-      requestHelper.sendRequest(this, '/tag', {
+      requestHelper.sendRequest(this, '/radiodns/tag/1/tag', {
         method:      'post',
         data:        data,
         accessToken: '123abc'
@@ -447,7 +447,7 @@ describe("POST /tag", function() {
         time_source: 'broadcast'
       };
 
-      requestHelper.sendRequest(this, '/tag', {
+      requestHelper.sendRequest(this, '/radiodns/tag/1/tag', {
         method:      'post',
         data:        data,
         accessToken: '123abc'
@@ -475,7 +475,7 @@ describe("POST /tag", function() {
         time_source: 'broadcast'
       };
 
-      requestHelper.sendRequest(this, '/tag', {
+      requestHelper.sendRequest(this, '/radiodns/tag/1/tag', {
         method:      'post',
         data:        data,
         accessToken: '123abc'
@@ -503,7 +503,7 @@ describe("POST /tag", function() {
         // time_source: 'broadcast'
       };
 
-      requestHelper.sendRequest(this, '/tag', {
+      requestHelper.sendRequest(this, '/radiodns/tag/1/tag', {
         method:      'post',
         data:        data,
         accessToken: '123abc'
