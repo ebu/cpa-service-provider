@@ -56,16 +56,27 @@ var resetDatabase = function(done) {
   return dbHelper.resetDatabase(initDatabase, done);
 };
 
-var verifyXPathNodeValue = function(doc, path, value) {
+var selectXPathNode = function(doc, path) {
   var nodes = xpath.select(path, doc);
   expect(nodes.length).to.equal(1, "xpath " + path + " returned no elements");
-  expect(nodes[0].firstChild.data).to.equal(value);
+
+  return nodes[0];
+};
+
+var verifyXPathNodeValue = function(doc, path, value) {
+  var node = selectXPathNode(doc, path);
+  expect(node.firstChild.data).to.equal(value);
 };
 
 var verifyXPathAttribute = function(doc, path, value) {
-  var nodes = xpath.select(path, doc);
-  expect(nodes.length).to.equal(1, "xpath " + path + " returned no elements");
-  expect(nodes[0].nodeValue).to.equal(value);
+  var node = selectXPathNode(doc, path);
+  expect(node.nodeValue).to.equal(value);
+};
+
+var verifyXPathNodeHasNamespace = function(doc, path, uri, prefix) {
+  var node = selectXPathNode(doc, path);
+  var actualPrefix = node.lookupPrefix(uri);
+  expect(actualPrefix).to.equal(prefix);
 };
 
 describe("GET /radiodns/tag/1/tags", function() {
@@ -99,10 +110,13 @@ describe("GET /radiodns/tag/1/tags", function() {
         this.doc = parser.parseFromString(this.res.text);
       });
 
-      it("should reference the atom namespace");
-        // TODO: xmlns => "http://www.w3.org/2005/Atom"
-      it("should reference the radiotag namespace");
-        // TODO: 'xmlns:radiotag' => 'http://radiodns.org/2011/radiotag'
+      it("should reference the atom namespace", function() {
+        verifyXPathNodeHasNamespace(this.doc, '/feed', 'http://www.w3.org/2005/Atom', '');
+      });
+
+      it("should reference the radiotag namespace", function() {
+        verifyXPathNodeHasNamespace(this.doc, '/feed', 'http://radiodns.org/2011/radiotag', 'radiotag');
+      });
 
       it("should contain a title", function() {
         verifyXPathNodeValue(this.doc, '/feed/title', 'Tag List');
@@ -273,10 +287,13 @@ describe("POST /radiodns/tag/1/tag", function() {
         this.doc = parser.parseFromString(this.res.text);
       });
 
-      it("should reference the atom namespace");
-        // TODO: xmlns => "http://www.w3.org/2005/Atom"
-      it("should reference the radiotag namespace");
-        // TODO: 'xmlns:radiotag' => 'http://radiodns.org/2011/radiotag'
+      it("should reference the atom namespace", function() {
+        verifyXPathNodeHasNamespace(this.doc, '/feed', 'http://www.w3.org/2005/Atom', '');
+      });
+
+      it("should reference the radiotag namespace", function() {
+        verifyXPathNodeHasNamespace(this.doc, '/feed', 'http://radiodns.org/2011/radiotag', 'radiotag');
+      });
 
       it("should contain a title", function() {
         verifyXPathNodeValue(this.doc, '/feed/title', 'Tag List');
