@@ -7,6 +7,8 @@ var db     = require('../models');
 var _ = require('lodash');
 var uuid = require('node-uuid');
 
+var tagPath = '/radiodns/tag/1';
+
 module.exports = function(app) {
   var logger = app.get('logger');
   var config = app.get('config');
@@ -148,11 +150,11 @@ module.exports = function(app) {
 
   if (config.cors && config.cors.enabled) {
     // Enable pre-flight CORS request for POST /token
-    app.options('/tags', cors);
-    app.get('/tags', cors, protectedResourceHandler, getTagsHandler);
+    app.options(tagPath + '/tags', cors);
+    app.get(tagPath + '/tags', cors, protectedResourceHandler, getTagsHandler);
   }
   else {
-    app.get('/tags', protectedResourceHandler, getTagsHandler);
+    app.get(tagPath + '/tags', protectedResourceHandler, getTagsHandler);
   }
 
   /**
@@ -205,11 +207,11 @@ module.exports = function(app) {
 
   if (config.cors && config.cors.enabled) {
     // Enable pre-flight CORS request for POST /token
-    app.options('/tag', cors);
-    app.post('/tag', cors, protectedResourceHandler, postTagHandler);
+    app.options(tagPath + '/tag', cors);
+    app.post(tagPath + '/tag', cors, protectedResourceHandler, postTagHandler);
   }
   else {
-    app.post('/tag', protectedResourceHandler, postTagHandler);
+    app.post(tagPath + '/tag', protectedResourceHandler, postTagHandler);
   }
 
   /**
