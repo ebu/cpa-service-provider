@@ -24,5 +24,8 @@ module.exports = {
   service_provider: {
     name:   "BBC1",
     domain: "sp.example.com"
-  }
+  },
+
+  // URL path prefix, e.g., '/myapp'
+  urlPrefix: ''
 };

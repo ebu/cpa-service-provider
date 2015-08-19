@@ -38,5 +38,8 @@ module.exports = {
     allowed_domains: [
       "http://cpa-client.ebu.io"
     ]
-  }
+  },
+
+  // URL path prefix, e.g., '/myapp'
+  urlPrefix: ''
 };
