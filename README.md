@@ -84,6 +84,7 @@ To generate a test coverage report (in the `coverage` directory);
 
 * [Chris Needham](https://github.com/chrisn) (BBC)
 * [Michael Barroco](https://github.com/barroco) (EBU)
+* [Andy Buckingham](https://github.com/andybee) (Togglebit)
 
 ## Copyright & license
 
