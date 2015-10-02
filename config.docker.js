@@ -31,7 +31,7 @@ module.exports = {
   cors: {
     enabled: true,
     allowed_domains: [
-      'http://cpa-client.ebu.io'
+      process.env.CPA_CLIENT_URL
     ]
   }
 };
