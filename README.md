@@ -3,7 +3,7 @@
 This project contains a reference implementation of the Cross-Platform
 Authentication Service Provider.
 
-This software implements version 1.0 of the Cross-Platform Authentication Protocol ([EBU Tech 3366](https://tech.ebu.ch/docs/tech/tech3366.pdf))
+This software implements version 1.0 of the Cross-Platform Authentication Protocol ([ETSI TS 103 407](https://portal.etsi.org/webapp/WorkProgram/Report_WorkItem.asp?WKI_ID=47970)).
 
 More information on the [EBU Cross-Platform Authentication project](http://tech.ebu.ch/cpa)
 
@@ -77,8 +77,11 @@ To generate a test coverage report (in the `coverage` directory);
 
 ## Related projects
 
-* [CPA Authentication Provider](https://github.com/ebu/cpa-auth-provider)
-* [CPA Client](https://github.com/ebu/cpa-client)
+* [Tutorial](https://github.com/ebu/cpa-tutorial)
+* [Authentication Provider](https://github.com/ebu/cpa-auth-provider)
+* [Android Client](https://github.com/ebu/cpa-android)
+* [iOS Client](https://github.com/ebu/cpa-ios)
+* [JavaScript Client](https://github.com/ebu/cpa.js)
 
 ## Contributors
 
@@ -88,6 +91,6 @@ To generate a test coverage report (in the `coverage` directory);
 
 ## Copyright & license
 
-Copyright (c) 2014, EBU-UER Technology & Innovation
+Copyright (c) 2014-2016, EBU-UER Technology & Innovation
 
 The code is under BSD (3-Clause) License. (see LICENSE.txt)
